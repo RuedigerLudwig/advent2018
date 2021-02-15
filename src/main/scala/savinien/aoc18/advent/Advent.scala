@@ -1,11 +1,11 @@
 package savinien.aoc18.advent
 
-import zio._
-import zio.console.Console
 import savinien.aoc18.advent.days.SingleDay
 import savinien.aoc18.advent.input.AdventInput
 import savinien.aoc18.advent.output.AdventOutput
 import savinien.aoc18.day01.Day01
+import zio._
+import zio.console.Console
 
 object Advent extends App {
   def MAX_DAY = 1

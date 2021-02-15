@@ -1,8 +1,8 @@
 package savinien.aoc18.advent
 
+import savinien.aoc18.day01.Common
 import zio._
 import zio.macros.accessible
-import savinien.aoc18.day01.Common
 
 package object input {
   type AdventInput = Has[AdventInput.Service]
