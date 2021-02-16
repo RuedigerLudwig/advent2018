@@ -1,6 +1,7 @@
-package savinien.aoc18.advent
+package savinien.aoc18
+package advent
 
-import savinien.aoc18.Day01
+import day01.Day01
 
 object Days {
   def MAX_DAY = 1

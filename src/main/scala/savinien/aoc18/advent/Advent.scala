@@ -1,9 +1,10 @@
-package savinien.aoc18.advent
+package savinien.aoc18
+package advent
 
-import savinien.aoc18.advent.Days
-import savinien.aoc18.advent.days.SingleDay
-import savinien.aoc18.advent.input.AdventInput
-import savinien.aoc18.advent.output.AdventOutput
+import advent.Days
+import days.SingleDay
+import input.AdventInput
+import output.AdventOutput
 import zio._
 import zio.console.Console
 

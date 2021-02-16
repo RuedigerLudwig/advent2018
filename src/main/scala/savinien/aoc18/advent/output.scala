@@ -4,7 +4,7 @@ import zio._
 import zio.console.Console
 import zio.macros.accessible
 
-package object output {
+object output {
   type AdventOutput = Has[AdventOutput.Service]
 
   @accessible

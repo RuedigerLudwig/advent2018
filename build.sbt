@@ -45,7 +45,7 @@ lazy val commonSettings =
   Seq(
       name := "advent2018"
     , scalaVersion := "2.13.4"
-    , organization := "com.example"
+    , organization := "savinien"
     , scalacOptions += "-Ymacro-annotations"
   )
 
