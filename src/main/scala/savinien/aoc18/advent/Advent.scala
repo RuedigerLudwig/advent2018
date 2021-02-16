@@ -1,22 +1,16 @@
 package savinien.aoc18.advent
 
+import savinien.aoc18.advent.Days
 import savinien.aoc18.advent.days.SingleDay
 import savinien.aoc18.advent.input.AdventInput
 import savinien.aoc18.advent.output.AdventOutput
-import savinien.aoc18.day01.Day01
 import zio._
 import zio.console.Console
 
 object Advent extends App {
-  def MAX_DAY = 1
-
-  def getDay(day: Int) = day match {
-    case 1 => Day01.live
-  }
-
   def run(args: List[String]) = {
     def loop(day: Int): Task[Unit] =
-      if (day > MAX_DAY)
+      if (day > Days.MAX_DAY)
         Task.succeed(())
       else if (args.isEmpty || args.contains(f"day$day%02d")) {
         singleDay.provideLayer(prepareEnvironment(day)) *> loop(day + 1)
@@ -34,7 +28,7 @@ object Advent extends App {
     val output: ULayer[AdventOutput]              = Console.live >>> AdventOutput.live(day)
     val io: ULayer[AdventInput with AdventOutput] = AdventInput.live(day) ++ output
 
-    val singleDay = io >>> getDay(day)
+    val singleDay = io >>> Days.getDay(day)
 
     singleDay
   }

@@ -2,10 +2,10 @@ package day01
 
 import advent.AdventInputMock
 import advent.AdventOutputMock
+import savinien.aoc18.Day01
 import savinien.aoc18.advent.days.SingleDay
-import savinien.aoc18.day01.Day01
-import zio.test._
 import zio.test.Assertion._
+import zio.test._
 import zio.test.mock.Expectation._
 
 object Day01Part1Spec extends DefaultRunnableSpec {

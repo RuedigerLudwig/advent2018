@@ -1,8 +1,8 @@
 package savinien.aoc18.advent
 
 import zio._
-import zio.macros.accessible
 import zio.console.Console
+import zio.macros.accessible
 
 package object output {
   type AdventOutput = Has[AdventOutput.Service]
