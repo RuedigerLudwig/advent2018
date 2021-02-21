@@ -27,7 +27,7 @@ object Tests {
           equalTo((1, 3))
       )
 
-      val result = SingleDay.part1.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
     , testM("day01 summes correctly 2") {
@@ -38,7 +38,7 @@ object Tests {
           equalTo((1, 0))
       )
 
-      val result = SingleDay.part1.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
     , testM("day01 summes correctly 3") {
@@ -49,7 +49,7 @@ object Tests {
           equalTo((1, -6))
       )
 
-      val result = SingleDay.part1.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
   )
@@ -63,7 +63,7 @@ object Tests {
           equalTo((2, 0))
       )
 
-      val result = SingleDay.part2.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part2.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
     , testM("day01 finds correct repeat 2") {
@@ -74,7 +74,7 @@ object Tests {
           equalTo((2, 10))
       )
 
-      val result = SingleDay.part2.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part2.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
     , testM("day01 finds correct repeat 3") {
@@ -85,7 +85,7 @@ object Tests {
           equalTo((2, 5))
       )
 
-      val result = SingleDay.part2.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part2.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
     , testM("day01 finds correct repeat 4") {
@@ -96,7 +96,7 @@ object Tests {
           equalTo((2, 14))
       )
 
-      val result = SingleDay.part2.provideLayer(input ++ expected >>> Day01.live)
+      val result = SingleDay.part2.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
   )
