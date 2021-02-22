@@ -8,6 +8,7 @@ import zio.test.mock.Expectation._
 import advent.AdventInputMock
 import advent.AdventOutputMock
 import advent.days.SingleDay
+import zio.test.mock.MockConsole
 
 object Day01Part1Spec extends DefaultRunnableSpec {
   def spec = Tests.part1
@@ -23,7 +24,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("+1", "+1", "+1"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((1, 3))
       )
 
@@ -34,7 +35,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("+1", "+1", "-2"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((1, 0))
       )
 
@@ -45,13 +46,24 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("-1", "-2", "-3"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((1, -6))
       )
 
       val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
+    /*
+    , testM("day01 can handle wrong input") {
+      val input = AdventInputMock.GetData(
+          value(List("-1", "xxx", "-3"))
+      )
+      val expected = AdventOutputMock.empty
+
+      val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
+      assertM(result)(isUnit)
+    }
+   */
   )
 
   def part2 = suite("Day01Part2")(
@@ -59,7 +71,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("1", "-1"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((2, 0))
       )
 
@@ -70,7 +82,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("+3", "+3", "+4", "-2", "-4"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((2, 10))
       )
 
@@ -81,7 +93,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("-6", "+3", "+8", "+5", "-6"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((2, 5))
       )
 
@@ -92,7 +104,7 @@ object Tests {
       val input = AdventInputMock.GetData(
           value(List("+7", "+7", "-2", "-7", "-4"))
       )
-      val expected = AdventOutputMock.Output._0(
+      val expected = AdventOutputMock.OutputInt(
           equalTo((2, 14))
       )
 

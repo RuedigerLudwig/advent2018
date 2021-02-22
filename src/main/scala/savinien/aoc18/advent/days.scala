@@ -3,7 +3,6 @@ package aoc18
 package advent
 
 import zio._
-import zio.macros.accessible
 
 import aoc18.day01
 
@@ -16,11 +15,16 @@ package object days {
 
   type SingleDay = Has[SingleDay.Service]
 
-  @accessible
   object SingleDay {
     trait Service {
       def part1: Task[Unit]
       def part2: Task[Unit]
     }
+
+    def part1: ZIO[SingleDay, Throwable, Unit] =
+      ZIO.accessM(_.get.part1)
+
+    def part2: ZIO[SingleDay, Throwable, Unit] =
+      ZIO.accessM(_.get.part2)
   }
 }

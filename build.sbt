@@ -9,7 +9,6 @@ lazy val root =
     .settings(
         libraryDependencies ++= Seq(
           library.zio
-        , library.zioMacros
         , library.zioTest    % Test
         , library.zioTestSbt % Test
       )
@@ -27,7 +26,6 @@ lazy val library =
       val zio = "1.0.4-2"
     }
     val zio        = "dev.zio" %% "zio"          % Version.zio
-    val zioMacros  = "dev.zio" %% "zio-macros"   % Version.zio
     val zioTest    = "dev.zio" %% "zio-test"     % Version.zio
     val zioTestSbt = "dev.zio" %% "zio-test-sbt" % Version.zio
   }
@@ -44,14 +42,19 @@ lazy val settings =
 lazy val commonSettings =
   Seq(
       name := "advent2018"
-    , scalaVersion := "2.13.4"
+    //, scalaVersion := "2.13.4"
+    , scalaVersion := "3.0.0-M3"
     , organization := "savinien"
-    , scalacOptions += "-Ymacro-annotations"
+    , scalacOptions ++= Seq(
+        "-explain"
+      , "-source:3.0-migration"
+      , "-new-syntax"
+    )
   )
 
 lazy val scalafmtSettings =
   Seq(
-      scalafmtOnCompile := true
+      // scalafmtOnCompile := true
   )
 
 lazy val commandAliases =

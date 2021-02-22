@@ -13,13 +13,13 @@ object Advent extends App {
     loop(1, args).exitCode
 
   private def loop(day: Int, args: List[String]): Task[Unit] =
-    if (day > days.MAX_DAY)
+    if day > days.MAX_DAY then
       Task.succeed(())
-    else if (args.isEmpty || args.contains(f"day$day%02d")) {
+    else if args.isEmpty || args.contains(f"day$day%02d") then
       singleDay.provideLayer(prepareEnvironment(day)) *> loop(day + 1, args)
-    } else {
+    else 
       loop(day + 1, args)
-    }
+    
 
   private val singleDay =
     SingleDay.part1 *> SingleDay.part2
