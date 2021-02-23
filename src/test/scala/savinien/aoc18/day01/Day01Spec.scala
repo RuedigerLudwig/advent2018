@@ -6,9 +6,8 @@ import zio.test._
 import zio.test.mock.Expectation._
 
 import advent.AdventInputMock
-import advent.AdventOutputMock
-import advent.days.SingleDay
 import zio.test.mock.MockConsole
+import advent._
 
 object Day01Part1Spec extends DefaultRunnableSpec:
   def spec = Tests.part1
@@ -17,6 +16,11 @@ object Day01Part2Spec extends DefaultRunnableSpec:
   def spec = Tests.part2
 
 object Tests:
+  def all = suite("Day01All")(
+    part1,
+    part2
+  )
+
   def part1 = suite("Day01Part1")(
       testM("day01 summes correctly 1") {
       val input = AdventInputMock.GetData(
@@ -111,3 +115,5 @@ object Tests:
       assertM(result)(isUnit)
     }
   )
+
+end Tests

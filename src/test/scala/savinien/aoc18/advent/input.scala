@@ -1,6 +1,7 @@
-package savinien.aoc18.advent
+package savinien.aoc18
+package advent
 
-import input.AdventInput
+import advent._
 import zio.test.mock._
 import zio._
 
