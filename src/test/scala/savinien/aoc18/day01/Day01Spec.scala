@@ -10,15 +10,13 @@ import advent.AdventOutputMock
 import advent.days.SingleDay
 import zio.test.mock.MockConsole
 
-object Day01Part1Spec extends DefaultRunnableSpec {
+object Day01Part1Spec extends DefaultRunnableSpec:
   def spec = Tests.part1
-}
 
-object Day01Part2Spec extends DefaultRunnableSpec {
+object Day01Part2Spec extends DefaultRunnableSpec:
   def spec = Tests.part2
-}
 
-object Tests {
+object Tests:
   def part1 = suite("Day01Part1")(
       testM("day01 summes correctly 1") {
       val input = AdventInputMock.GetData(
@@ -53,17 +51,18 @@ object Tests {
       val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
-    /*
     , testM("day01 can handle wrong input") {
       val input = AdventInputMock.GetData(
           value(List("-1", "xxx", "-3"))
       )
-      val expected = AdventOutputMock.empty
+      val expected = AdventOutputMock.Error(
+         anything
+      )
+      //val expected = AdventOutputMock.Empty
 
       val result = SingleDay.part1.provideLayer(input ++ expected >>> day01.live)
       assertM(result)(isUnit)
     }
-   */
   )
 
   def part2 = suite("Day01Part2")(
@@ -112,4 +111,3 @@ object Tests {
       assertM(result)(isUnit)
     }
   )
-}

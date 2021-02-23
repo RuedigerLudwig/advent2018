@@ -4,7 +4,7 @@ import input.AdventInput
 import zio.test.mock._
 import zio._
 
-object AdventInputMock extends Mock[AdventInput] {
+object AdventInputMock extends Mock[AdventInput]:
   object GetData extends Effect[Unit, Nothing, List[String]]
 
   val compose: URLayer[Has[Proxy], AdventInput] =
@@ -13,4 +13,3 @@ object AdventInputMock extends Mock[AdventInput] {
         def getData = proxy(GetData)
       }
     }
-}

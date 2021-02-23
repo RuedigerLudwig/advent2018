@@ -42,19 +42,18 @@ lazy val settings =
 lazy val commonSettings =
   Seq(
       name := "advent2018"
-    //, scalaVersion := "2.13.4"
     , scalaVersion := "3.0.0-M3"
     , organization := "savinien"
     , scalacOptions ++= Seq(
         "-explain"
-      , "-source:3.0-migration"
+      , "-indent"
       , "-new-syntax"
     )
   )
 
 lazy val scalafmtSettings =
   Seq(
-      // scalafmtOnCompile := true
+    // scalafmtOnCompile := true
   )
 
 lazy val commandAliases =
