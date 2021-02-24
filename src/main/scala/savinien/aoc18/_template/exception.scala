@@ -3,8 +3,7 @@ package _template
 
 import advent._
 
-sealed trait TemplateException extends AdventException { self =>
-  override def toString() = self match
-    case DummyException(s) => f"Dummy: $s"
-}
-case class DummyException(s: String) extends TemplateException
+sealed trait TemplateException extends AdventException
+
+case class DummyException(message: String) extends TemplateException:
+  override def toString() = f"Dummy: $message"
