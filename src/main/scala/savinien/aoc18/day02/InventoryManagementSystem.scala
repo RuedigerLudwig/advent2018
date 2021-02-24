@@ -4,24 +4,18 @@ package day02
 import advent._
 import zio._
 
-class InventoryService(input: AdventInput.Service, output: AdventOutput.Service) extends SingleDay.Service:
+class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = 
-    (for
-      lines        <- input.getData
-      (two, three) <- InventoryService.count_two_three(lines)
-      _            <- output.outputInt(1, two * three)
-    yield ())
-    .refineToOrDie[AdventException]
-    .catchAll { e => output.error(1, e)}
+    for
+      lines     <- input.getData
+      two_three <- InventoryService.count_two_three(lines)
+    yield AdventIntResult(two_three._1 * two_three._2)
 
   override def part2 = 
-    (for
+    for
       lines  <- input.getData
       ticket <- InventoryService.checkDouble(lines)
-      _      <- output.outputSingleLine(2, ticket)
-    yield())
-    .refineToOrDie[AdventException]
-    .catchAll { e => output.error(1, e)}
+    yield AdventStringResult(ticket)
 
 object InventoryService:
   def count_chars(line: String) =
@@ -34,7 +28,7 @@ object InventoryService:
         }
     count_chars_(line.toList, Map())
 
-  def has_two_three(line: String): UIO[(Boolean, Boolean)] =
+  def has_two_three(line: String) = 
     count_chars(line).map(_.values.foldLeft((false, false)) { (tup, value) =>
       value match {
         case 2 => (true, tup._2)
@@ -43,7 +37,7 @@ object InventoryService:
       }
     })
 
-  def count_two_three(lines: List[String]): UIO[(Int, Int)] =
+  def count_two_three(lines: List[String]) = 
     lines.map(has_two_three).foldLeft(ZIO.succeed(0, 0)) {
       (count, next) => count.zipWith(next) { (count, next) => next match
         case (true, true)   => (count._1 + 1, count._2 + 1)
@@ -53,7 +47,7 @@ object InventoryService:
       }
     }
 
-  def checkCommon(line1: String, line2: String): UIO[Option[String]] =
+  def checkCommon(line1: String, line2: String) = 
     val (found_differ, result) = line1.toList.zip(line2.toList).foldLeft[(Boolean, Option[String])]((false, Some(""))) {
       (acc, next) => (acc, next) match
         case ((_,      None),    (_, _))           => (false, None)
@@ -81,3 +75,4 @@ object InventoryService:
           case Some(result) => ZIO.succeed(result)
           case None         => checkDouble(rest)
         }
+end InventoryService

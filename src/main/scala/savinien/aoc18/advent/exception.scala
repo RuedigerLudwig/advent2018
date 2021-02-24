@@ -2,6 +2,9 @@ package savinien.aoc18.advent
 
 trait AdventException extends Exception
 
+case class NotImplemented() extends AdventException:
+  override def toString() = "Not implemented"
+
 case class ThrowableException(error: Throwable) extends AdventException:
   override def toString() = f"Error was raised: $error"
 

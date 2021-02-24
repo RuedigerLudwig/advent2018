@@ -62,11 +62,9 @@ object Tests:
       val input = AdventInputMock.GetData(
           value(List("abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab"))
       )
-      val expected = AdventOutputMock.OutputInt(
-          equalTo((1, 12))
-      )
-      val result = SingleDay.part1.provideLayer(input ++ expected >>> day02.live)
-      assertM(result)(isUnit)
+
+      val result = SingleDay.part1.provideLayer(input >>> day02.live)
+      assertM(result)(equalTo(AdventIntResult(12)))
     })
 
   def part2 = 
@@ -96,11 +94,8 @@ object Tests:
       val input = AdventInputMock.GetData(
           value(List("abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"))
       )
-      val expected = AdventOutputMock.OutputSingleLine(
-          equalTo((2, "fgij"))
-      )
-      val result = SingleDay.part2.provideLayer(input ++ expected >>> day02.live)
-      assertM(result)(isUnit)
+      val result = SingleDay.part2.provideLayer(input >>> day02.live)
+      assertM(result)(equalTo(AdventStringResult("fgij")))
       }
   )
 

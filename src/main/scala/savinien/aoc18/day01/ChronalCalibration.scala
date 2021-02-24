@@ -4,23 +4,17 @@ package day01
 import advent._
 import zio._
 
-class ChronalService(input: AdventInput.Service, output: AdventOutput.Service) extends SingleDay.Service:
+class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 =
-    (for 
+    for 
       numbers <- ChronalService.getNumbers(input)
-      _       <- output.outputInt(1, numbers.sum)
-    yield ())
-    .refineToOrDie[AdventException]
-    .catchAll { e => output.error(1, e) } 
+    yield AdventIntResult(numbers.sum)
 
   override def part2 =
-    (for 
+    for 
       numbers <- ChronalService.getNumbers(input)
       repeat  <- ChronalService.getRepeat(numbers)
-      _       <- output.outputInt(2, repeat)
-    yield ())
-    .refineToOrDie[AdventException]
-    .catchAll { e => output.error(2, e) } 
+    yield AdventIntResult(repeat)
 
 object ChronalService:
   def getNumbers(input: AdventInput.Service): IO[AdventException, Iterable[Int]] =

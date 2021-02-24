@@ -4,9 +4,8 @@ import zio._
 import advent._
 
 package object day01:
-  def live: URLayer[AdventInput with AdventOutput, SingleDay] =
-    ZLayer.fromServices[
+  def live: URLayer[AdventInput, SingleDay] =
+    ZLayer.fromService[
         AdventInput.Service
-      , AdventOutput.Service
       , SingleDay.Service
-    ] { (input, output) => ChronalService(input, output) }
+    ] { input => ChronalService(input) }

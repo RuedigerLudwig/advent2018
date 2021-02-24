@@ -4,9 +4,9 @@ package dayXX
 import advent._
 import zio._
 
-class TemplateService(input: AdventInput.Service, output: AdventOutput.Service) extends SingleDay.Service:
-  override def part1 = UIO.succeed(())
-  override def part2 = UIO.succeed(())
+class TemplateService(input: AdventInput.Service) extends SingleDay.Service:
+  override def part1 = ZIO.fail(NotImplemented())
+  override def part2 = ZIO.fail(NotImplemented())
 
 object TemplateService:
 end TemplateService
