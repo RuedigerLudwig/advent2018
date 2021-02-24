@@ -17,17 +17,16 @@ class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventIntResult(repeat)
 
 object ChronalService:
-  def getNumbers(input: AdventInput.Service): IO[AdventException, Iterable[Int]] =
-    (for
+  def getNumbers(input: AdventInput.Service) =
+    for
       lines   <- input.getData
       numbers <- ZIO.partition(lines)(toInt).flatMap {(errors, numbers) =>
         if !errors.isEmpty then
           IO.fail(MultiError(errors.toList))
         else
-          UIO.succeed(numbers)
+          IO.succeed(numbers)
       }
-    yield numbers)
-    .refineToOrDie[AdventException]
+    yield numbers
 
   def toInt(s: String) =
     ZIO.effect(s.toInt)

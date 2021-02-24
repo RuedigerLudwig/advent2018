@@ -5,7 +5,4 @@ import advent._
 
 package object day02:
   def live: URLayer[AdventInput, SingleDay] =
-    ZLayer.fromService[
-        AdventInput.Service
-      , SingleDay.Service
-    ] { input => InventoryService(input) }
+    ZLayer.fromService[ AdventInput.Service , SingleDay.Service ] { InventoryService(_) }

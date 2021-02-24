@@ -22,19 +22,18 @@ object InventoryService:
     def count_chars_(line: List[Char], result: Map[Char, Int]): UIO[Map[Char, Int]] =
       line match
         case Nil           => UIO.succeed(result)
-        case first :: rest => {
+        case first :: rest =>
           val map = result + (first -> (result.getOrElse(first, 0) + 1))
           count_chars_(rest, map)
-        }
+
     count_chars_(line.toList, Map())
 
   def has_two_three(line: String) = 
     count_chars(line).map(_.values.foldLeft((false, false)) { (tup, value) =>
-      value match {
+      value match
         case 2 => (true, tup._2)
         case 3 => (tup._1, true)
         case _ => tup
-      }
     })
 
   def count_two_three(lines: List[String]) = 
