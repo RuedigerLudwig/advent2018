@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day01
 
-import advent._
+import common._
 
 sealed trait ChronalException extends AdventException
 

@@ -1,10 +1,10 @@
 package savinien.aoc18
 package day02
 
-import advent._
+import common._
 
-import zio.test.Assertion._
 import zio.test._
+import zio.test.Assertion._
 import zio.test.mock.Expectation._
 
 object Day02Part1Spec extends DefaultRunnableSpec:

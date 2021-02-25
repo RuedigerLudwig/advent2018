@@ -1,4 +1,4 @@
-package savinien.aoc18.advent
+package savinien.aoc18.common
 
 import zio._
 import java.io.IOException

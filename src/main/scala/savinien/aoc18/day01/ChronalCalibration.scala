@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day01
 
-import advent._
+import common._
 import zio._
 
 class ChronalService(input: AdventInput.Service) extends SingleDay.Service:

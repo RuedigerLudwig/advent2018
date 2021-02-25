@@ -1,9 +1,8 @@
 package savinien.aoc18
-package advent
+package common
 
-import advent._
-import zio.test.mock._
 import zio._
+import zio.test.mock._
 
 object AdventInputMock extends Mock[AdventInput]:
   object GetData extends Effect[Unit, Nothing, List[String]]

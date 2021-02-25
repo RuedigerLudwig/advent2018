@@ -1,13 +1,11 @@
 package savinien.aoc18
 package day01
 
-import zio.test.Assertion._
 import zio.test._
+import zio.test.Assertion._
 import zio.test.mock.Expectation._
 
-import advent.AdventInputMock
-import zio.test.mock.MockConsole
-import advent._
+import common._
 
 object Day01Part1Spec extends DefaultRunnableSpec:
   def spec = Tests.part1

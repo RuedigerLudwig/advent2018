@@ -1,18 +1,8 @@
 package savinien
 package aoc18
-package advent
+package common
 
 import zio._
-
-import aoc18.day01
-import aoc18.day02
-
-object Days:
-  def MAX_DAY = 2
-
-  def getDay(day: Int) = day match
-    case 1 => day01.live
-    case 2 => day02.live
 
 type SingleDay = Has[SingleDay.Service]
 

@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day02
 
-import advent._
+import common._
 import zio._
 
 class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
@@ -68,7 +68,7 @@ object InventoryService:
     end checkDouble_
 
     lines match
-      case Nil           => ZIO.fail(NoTicketFound())
+      case Nil           => ZIO.fail(NoTicketFound)
       case first :: rest => 
         checkDouble_(first, rest).flatMap { _.match
           case Some(result) => ZIO.succeed(result)

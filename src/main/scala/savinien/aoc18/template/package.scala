@@ -1,6 +1,6 @@
 package savinien.aoc18
 
-import advent._
+import common._
 import zio._
 
 package object dayXX:

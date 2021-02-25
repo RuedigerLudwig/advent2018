@@ -1,8 +1,8 @@
-package savinien.aoc18.advent
+package savinien.aoc18.common
 
 trait AdventException extends Exception
 
-case class NotImplemented() extends AdventException:
+case object NotImplemented extends AdventException:
   override def toString() = "Not implemented"
 
 case class ThrowableException(error: Throwable) extends AdventException:
