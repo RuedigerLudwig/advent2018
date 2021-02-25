@@ -60,7 +60,7 @@ object Tests:
 
     , testM("day02 gets correct number") {
       val input = AdventInputMock.GetData(
-          value(List("abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab"))
+          value(List("abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab").mkString("\n"))
       )
 
       val result = SingleDay.part1.provideLayer(input >>> day02.live)
@@ -92,7 +92,7 @@ object Tests:
       }
     , testM("day02 gets correct tickets") {
       val input = AdventInputMock.GetData(
-          value(List("abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"))
+          value(List("abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz").mkString("\n"))
       )
       val result = SingleDay.part2.provideLayer(input >>> day02.live)
       assertM(result)(equalTo(AdventStringResult("fgij")))

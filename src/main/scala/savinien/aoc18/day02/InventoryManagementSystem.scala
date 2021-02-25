@@ -7,17 +7,27 @@ import zio._
 class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = 
     for
-      lines     <- input.getData
+      data      <- input.getData
+      lines     <- InventoryService.toList(data)
       two_three <- InventoryService.count_two_three(lines)
     yield AdventIntResult(two_three._1 * two_three._2)
 
   override def part2 = 
     for
-      lines  <- input.getData
+      data   <- input.getData
+      lines  <- InventoryService.toList(data)
       ticket <- InventoryService.checkDouble(lines)
     yield AdventStringResult(ticket)
 
 object InventoryService:
+  def toList(s: String) =
+    import TokenParser._
+    val parser = rep(lowerCaseStrings)
+    parseAll(parser, s) match
+      case Success(value, _) => ZIO.succeed(value)
+      case Failure(msg, _) => ZIO.fail(ReadError(msg))
+      case Error(msg, _) => ZIO.fail(ReadError(msg))
+
   def count_chars(line: String) =
     def count_chars_(line: List[Char], result: Map[Char, Int]): UIO[Map[Char, Int]] =
       line match

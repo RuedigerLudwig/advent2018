@@ -19,18 +19,18 @@ class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
 object ChronalService:
   def getNumbers(input: AdventInput.Service) =
     for
-      lines   <- input.getData
-      numbers <- ZIO.partition(lines)(toInt).flatMap {(errors, numbers) =>
-        if !errors.isEmpty then
-          IO.fail(MultiError(errors.toList))
-        else
-          IO.succeed(numbers)
-      }
+      data   <- input.getData
+      numbers <- toInt(data)
     yield numbers
 
   def toInt(s: String) =
-    ZIO.effect(s.toInt)
-    .catchAll(e => ZIO.fail(NumberFormatWrong(s)))
+    import TokenParser._
+
+    val parser = rep(signedInteger)
+    parseAll(parser, s) match
+      case Success(value, _) => ZIO.succeed(value)
+      case Failure(msg, _) => ZIO.fail(ReadError(msg))
+      case Error(msg, _) => ZIO.fail(ReadError(msg))
 
   def getRepeat(list: Iterable[Int]) =
     ZIO.succeed(

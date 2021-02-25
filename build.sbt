@@ -2,6 +2,12 @@
 // Projects
 // *****************************************************************************
 
+lazy val Version = new {
+  val scala   = "3.0.0-M3"
+  val zio     = "1.0.4-2"
+  val parsers = "1.2.0-M1"
+}
+
 lazy val root =
   project
     .in(file("."))
@@ -9,6 +15,7 @@ lazy val root =
     .settings(
         libraryDependencies ++= Seq(
           library.zio
+        , library.parsers
         , library.zioTest    % Test
         , library.zioTestSbt % Test
       )
@@ -22,12 +29,10 @@ lazy val root =
 
 lazy val library =
   new {
-    object Version {
-      val zio = "1.0.4-2"
-    }
-    val zio        = "dev.zio" %% "zio"          % Version.zio
-    val zioTest    = "dev.zio" %% "zio-test"     % Version.zio
-    val zioTestSbt = "dev.zio" %% "zio-test-sbt" % Version.zio
+    val zio        = "dev.zio"                %% "zio"                      % Version.zio
+    val zioTest    = "dev.zio"                %% "zio-test"                 % Version.zio
+    val zioTestSbt = "dev.zio"                %% "zio-test-sbt"             % Version.zio
+    val parsers    = "org.scala-lang.modules" %% "scala-parser-combinators" % Version.parsers
   }
 
 // *****************************************************************************
@@ -42,7 +47,7 @@ lazy val settings =
 lazy val commonSettings =
   Seq(
       name := "advent2018"
-    , scalaVersion := "3.0.0-M3"
+    , scalaVersion := Version.scala
     , organization := "savinien"
     , scalacOptions ++= Seq(
         "-explain"

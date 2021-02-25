@@ -8,13 +8,13 @@ type AdventInput = Has[AdventInput.Service]
 
 object AdventInput:
   trait Service:
-    def getData: IO[AdventException, List[String]];
+    def getData: IO[AdventException, String];
 
   def live(day: Int): Layer[Nothing, AdventInput] =
     ZLayer.succeed[AdventInput.Service] {
       new Service {
-        override def getData: IO[AdventException, List[String]] =
-          getLines(f"input/day$day%02d.txt")
+        override def getData: IO[AdventException, String] =
+          getContent(f"input/day$day%02d.txt")
 
         private def openFile(path: String): Managed[IOException, Source] =
           val acquire =
@@ -23,10 +23,10 @@ object AdventInput:
 
           Managed.make(acquire)(release)
 
-        private def getLines(path: String): ZIO[Any, AdventException, List[String]] =
+        private def getContent(path: String): ZIO[Any, AdventException, String] =
           openFile(path)
             .use { source =>
-              ZIO(source.getLines().toList)
+              ZIO(source.mkString)
             }
             .refineToOrDie[IOException]
             .catchAll {
@@ -36,5 +36,5 @@ object AdventInput:
       }
     }
 
-def getData: ZIO[AdventInput, Throwable, List[String]] =
+def getData: ZIO[AdventInput, Throwable, String] =
   ZIO.accessM(_.get.getData)
