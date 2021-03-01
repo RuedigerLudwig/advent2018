@@ -1,5 +1,5 @@
 package savinien.aoc18
-package _template
+package dayXX
 
 import common._
 
