@@ -9,26 +9,15 @@ import zio.test.mock.Expectation._
 import zio._
 
 object DayXXPart1Spec extends DefaultRunnableSpec:
-  def spec = Tests.part1
-
-object DayXXPart2Spec extends DefaultRunnableSpec:
-  def spec = Tests.part2
-
-object Tests:
-  def all = suite("DayXXAll")(
-    part1, part2
+  def spec = suite("DayXXPart1")(
+    testM("dayxx part1 works") {
+      assertM(ZIO.unit)(isUnit)
+    }
   )
 
-  def part1 =
-    suite("DayXXPart1") {
-      testM("it works") {
-        assertM(ZIO.succeed(()))(isUnit)
-      }
+object DayXXPart2Spec extends DefaultRunnableSpec:
+  def spec = suite("DayXXPart2")(
+    testM("dayxx part2 works") {
+      assertM(ZIO.unit)(isUnit)
     }
-
-  def part2 =
-    suite("DayXXPart2") {
-      testM("it works") {
-        assertM(ZIO.succeed(()))(isUnit)
-      }
-    }
+  )

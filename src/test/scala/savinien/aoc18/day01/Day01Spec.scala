@@ -8,18 +8,7 @@ import zio.test.mock.Expectation._
 import common._
 
 object Day01Part1Spec extends DefaultRunnableSpec:
-  def spec = Tests.part1
-
-object Day01Part2Spec extends DefaultRunnableSpec:
-  def spec = Tests.part2
-
-object Tests:
-  def all = suite("Day01All")(
-    part1,
-    part2
-  )
-
-  def part1 = suite("Day01Part1")(
+  def spec = suite("Day01Part1")(
       testM("day01 summes correctly 1") {
       val input = AdventInputMock.GetData(
           value(List("+1", "+1", "+1").mkString("\n"))
@@ -54,7 +43,8 @@ object Tests:
     }
   )
 
-  def part2 = suite("Day01Part2")(
+object Day01Part2Spec extends DefaultRunnableSpec:
+  def spec = suite("Day01Part2")(
       testM("day01 finds correct repeat 1") {
       val input = AdventInputMock.GetData(
           value(List("1", "-1").mkString("\n"))
@@ -88,5 +78,3 @@ object Tests:
       assertM(result)(equalTo(AdventIntResult(14)))
     }
   )
-
-end Tests

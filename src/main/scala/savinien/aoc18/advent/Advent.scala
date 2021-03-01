@@ -24,6 +24,6 @@ object Advent extends App:
   private def runSinglePart(effect: ZIO[SingleDay, AdventException, AdventResult], day: Int, part: Int) =
     (for
       result <- effect
-      _      <- putStrLn(f"Result for day $day Part $part: $result")
+      _      <- putStrLn(s"Result for day $day Part $part: $result")
     yield ())
-    .catchAll { e => putStrLn(f"Error on day $day Part $part: $e") } 
+    .catchAll { e => putStrLn(s"Error on day $day Part $part: $e") } 

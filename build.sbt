@@ -3,9 +3,9 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala   = "3.0.0-M3"
-  val zio     = "1.0.4-2"
-  val parsers = "1.2.0-M1"
+  val scala   = "3.0.0-M3" // RC1 out, wait for zio
+  val zio     = "1.0.4-2"  // So far only scalaM3
+  val parsers = "1.2.0-M1" // M2 fo scala scalaRC1
 }
 
 lazy val root =
@@ -53,6 +53,7 @@ lazy val commonSettings =
         "-explain"
       , "-indent"
       , "-new-syntax"
+      , "-Xfatal-warnings"
     )
   )
 

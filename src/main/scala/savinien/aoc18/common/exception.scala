@@ -6,9 +6,12 @@ case object NotImplemented extends AdventException:
   override def toString() = "Not implemented"
 
 case class ThrowableException(error: Throwable) extends AdventException:
-  override def toString() = f"Error was raised: $error"
+  override def toString() = s"Error was raised: $error"
 
-case class ReadError(msg: String) extends AdventException:
+case class ParseError(msg: String, input: String) extends AdventException:
+  override def toString() = s"Error reading data: $msg"
+
+case class ParseFailure(msg: String, input: String) extends AdventException:
   override def toString() = s"Error reading data: $msg"
 
 case class MultiError(list: List[AdventException]) extends AdventException:

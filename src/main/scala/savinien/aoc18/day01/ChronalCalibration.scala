@@ -16,25 +16,18 @@ class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
       repeat  <- ChronalService.getRepeat(numbers)
     yield AdventIntResult(repeat)
 
-object ChronalService:
+private object ChronalService:
   def getNumbers(input: AdventInput.Service) =
     for
-      data   <- input.getData
-      numbers <- toInt(data)
+      data    <- input.getData
+      numbers <- toIntList(data)
     yield numbers
 
-  def toInt(s: String) =
-    import TokenParser._
-
-    val parser = rep(signedInteger)
-    parseAll(parser, s) match
-      case Success(value, _) => ZIO.succeed(value)
-      case Failure(msg, _) => ZIO.fail(ReadError(msg))
-      case Error(msg, _) => ZIO.fail(ReadError(msg))
+  def toIntList = TokenParser.parseAllZIO(TokenParser.signedInteger.*)
 
   def getRepeat(list: Iterable[Int]) =
     ZIO.succeed(
-        LazyList
+      LazyList
         .continually(list)
         .flatten
         .scanLeft((0, Set[Int]())) {
