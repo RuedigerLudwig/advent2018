@@ -6,7 +6,7 @@ import zio.console._
 import common._
 
 object Advent extends App:
-  def run(args: List[String]) =
+  def run(args: List[String]): URIO[ZEnv, ExitCode] =
     def loop(day: Int): UIO[Unit] =
       if day > AllDays.MAX_DAY then
         UIO.succeed(())

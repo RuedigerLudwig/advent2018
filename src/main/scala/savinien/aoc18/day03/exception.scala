@@ -11,5 +11,5 @@ case class NoLegalClaim(claim: String) extends MatterException:
 case object NoSolitaireFound extends MatterException:
   override def toString() = s"Did not find any Solitaire claims"
 
-case class TooManySolitaireFound(number : Int) extends MatterException:
-  override def toString() = s"Found $number solitaire Claims"
+case object TooManySolitaireFound extends MatterException:
+  override def toString() = s"Found more than one solitaire Claims"

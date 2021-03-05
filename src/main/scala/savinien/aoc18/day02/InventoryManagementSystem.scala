@@ -20,7 +20,7 @@ class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventStringResult(ticket)
 
 object InventoryService:
-  private[day02] def toStringList = TokenParser.parseAllZIO(TokenParser.lowerCaseStrings.*)
+  private[day02] def toStringList = ZioParser.parseAllToZioList(ZioParser.lowerCaseStrings)
 
   private[day02] def count_chars(line: String) =
     def count_chars_(line: List[Char], result: Map[Char, Int]): UIO[Map[Char, Int]] =

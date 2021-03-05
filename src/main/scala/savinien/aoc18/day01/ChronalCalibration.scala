@@ -23,7 +23,7 @@ private object ChronalService:
       numbers <- toIntList(data)
     yield numbers
 
-  def toIntList = TokenParser.parseAllZIO(TokenParser.signedInteger.*)
+  def toIntList = ZioParser.parseAllToZioList(ZioParser.signedInteger)
 
   def getRepeat(list: Iterable[Int]) =
     ZIO.succeed(

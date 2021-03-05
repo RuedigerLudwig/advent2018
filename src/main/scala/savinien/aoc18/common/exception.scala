@@ -5,6 +5,9 @@ trait AdventException extends Exception
 case object NotImplemented extends AdventException:
   override def toString() = "Not implemented"
 
+case object Unreachable extends AdventException:
+  override def toString() = "This error can never happen!"
+
 case class ThrowableException(error: Throwable) extends AdventException:
   override def toString() = s"Error was raised: $error"
 

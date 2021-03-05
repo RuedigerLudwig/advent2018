@@ -8,8 +8,8 @@ type SingleDay = Has[SingleDay.Service]
 
 object SingleDay:
   trait Service:
-    def part1: IO[AdventException, AdventResult]
-    def part2: IO[AdventException, AdventResult]
+    def part1: AdventTask[AdventResult]
+    def part2: AdventTask[AdventResult]
 
   def part1: ZIO[SingleDay, AdventException, AdventResult] =
     ZIO.accessM(_.get.part1)
