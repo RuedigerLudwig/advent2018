@@ -2,7 +2,9 @@ package savinien.aoc18
 package day03
 
 import common._
-import common.ZioParser._
+import parser.Parsers._
+import parser.Conversions.given
+import scala.language.implicitConversions
 
 case class Claim private(number: Int, area: Area)
 
@@ -11,10 +13,10 @@ object Claim:
     new Claim(number, Area(Pos(left, top), Pos(left+width-1, top+height-1)))
 
   def parser =
-    lead("#", unsignedInteger) ~ lead("@", unsignedInteger) ~ lead(",", unsignedInteger) ~ lead(":", unsignedInteger) ~ lead("x", unsignedInteger) ^^ {
+    ('#' >~> unsignedInteger) ~ (" @ " >~> unsignedInteger) ~ (',' >~> unsignedInteger) ~ (": " >~> unsignedInteger) ~ ('x' >~> unsignedInteger) ^^ {
       case number ~ left ~ top ~ width ~ height => Claim(number, left, top, width, height)
     }
   
-  def fromStringList = parseAllToZioList(Claim.parser)
+  def fromStringList = ZioParser.parseAllToZio(Claim.parser.lines)
 
-  def fromString = parseAllToZio(Claim.parser)
+  def fromString = ZioParser.parseAllToZio(Claim.parser)

@@ -3,9 +3,9 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala   = "3.0.0-M3" // RC1 out, wait for zio
-  val zio     = "1.0.4-2"  // So far only scalaM3
-  val parsers = "1.2.0-M1" // M2 for scala scalaRC1
+  val scala     = "3.0.0-RC1"
+  val zio       = "1.0.5"
+  val scalatest = "3.2.6"
 }
 
 lazy val root =
@@ -15,9 +15,9 @@ lazy val root =
     .settings(
         libraryDependencies ++= Seq(
           library.zio
-        , library.parsers
         , library.zioTest    % Test
         , library.zioTestSbt % Test
+        , library.scalatest  % Test
       )
       , publishArtifact := false
       , testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
@@ -29,10 +29,10 @@ lazy val root =
 
 lazy val library =
   new {
-    val zio        = "dev.zio"                %% "zio"                      % Version.zio
-    val zioTest    = "dev.zio"                %% "zio-test"                 % Version.zio
-    val zioTestSbt = "dev.zio"                %% "zio-test-sbt"             % Version.zio
-    val parsers    = "org.scala-lang.modules" %% "scala-parser-combinators" % Version.parsers
+    val zio        = "dev.zio"       %% "zio"          % Version.zio
+    val zioTest    = "dev.zio"       %% "zio-test"     % Version.zio
+    val zioTestSbt = "dev.zio"       %% "zio-test-sbt" % Version.zio
+    val scalatest  = "org.scalatest" %% "scalatest"    % Version.scalatest
   }
 
 // *****************************************************************************
@@ -50,10 +50,15 @@ lazy val commonSettings =
     , scalaVersion := Version.scala
     , organization := "savinien"
     , scalacOptions ++= Seq(
-        "-explain"
+        "-deprecation"
+      , "-explain"
       , "-indent"
       , "-new-syntax"
       , "-Xfatal-warnings"
+      // , "-Ycheck-init"
+      , "-Yrequire-targetName"
+      , "-Yexplicit-nulls"
+      , "-Yindent-colons"
     )
   )
 

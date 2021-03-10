@@ -1,35 +1,32 @@
-package savinien.aoc18.common
+package savinien.aoc18
+package common
 
-import scala.util.parsing.combinator._
-import zio._
-import scala.annotation.targetName
+import parser.Parser
+import parser.Parsers._
+import parser.Conversions.given
+import scala.language.implicitConversions
 import scala.util.Try
+import java.time.{LocalDateTime, LocalDate, LocalTime}
 
-object ZioParser extends RegexParsers:
-  def toInt(s: String): Parser[Int] = 
-    Try(s.toInt)
-      .fold(_ => failure("Not an integer"), success)
+object AdventParsers:
+  def lowerCaseStrings: Parser[String] = raw"[a-z]+".r
 
-  def unsignedInteger = raw"(0|[1-9]\d*)".r      >>  toInt 
-  def signedInteger   = raw"[+-]?(0|[1-9]\d*)".r >>  toInt 
-  def leadingZero     = raw"(\d*)".r             >>  toInt
+  def leadingZero: Parser[Int] = '0'.? >~> unsignedInteger
 
-  def lowerCaseStrings = raw"[a-z]+".r ^^ { _.toString }
+  def timeParser: Parser[LocalTime] = 
+    leadingZero ~ (':' >~> leadingZero) ^^ {
+      case hour ~ minute =>
+        Try(LocalTime.of(hour, minute).nn)
+          .fold(_ => Left(s"Not a correct time $hour $minute"), v => Right(v))
+    }
 
-  def lead[A, B](ignore: Parser[A], result: Parser[B]) = ignore ~> result
-  def trail[A, B](result: Parser[B], ignore: Parser[A]) = result <~ ignore
-
-  def parseToZio[A](parser: Parser[A])(word: String): IO[AdventException, (A, String)] =
-    parse(parser, word) match
-      case Failure(msg, _)       => IO.fail(ParseFailure(msg, word))
-      case Error(msg, _)         => IO.fail(ParseError(msg, word))
-      case Success(value, input) => IO.succeed((value, word.drop(input.offset)))
-
-  def parseToZIOList[A](parser: Parser[A])(word: String): IO[AdventException, (List[A], String)] =
-    parseToZio(parser.*)(word)
-
-  def parseAllToZio[A](parser: Parser[A])(word: String): IO[AdventException, A] =
-    parseToZio(phrase(parser))(word).map(_._1)
-
-  def parseAllToZioList[A](parser: Parser[A])(word: String): IO[AdventException, List[A]] =
-    parseToZio(phrase(parser.*))(word).map(_._1)
+  def dateParser: Parser[LocalDate] = 
+    unsignedInteger ~ ('-' >~> leadingZero) ~ ('-' >~> leadingZero) ^^ {
+      case year ~ month ~ day =>
+        Try(LocalDate.of(year, month, day).nn)
+          .fold(_ => Left(s"Not a correct date $year $month $day"), v => Right(v))
+    }
+  
+  def dateTimeParser: Parser[LocalDateTime] = dateParser ~ (whiteSpace >~> timeParser) ^^ {
+    case date ~ time => LocalDateTime.of(date, time).nn
+  }

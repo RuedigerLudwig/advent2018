@@ -11,23 +11,26 @@ import zio.test.Assertion._
 import zio.test.mock.Expectation._
 
 object Day04Part1Spec extends DefaultRunnableSpec:
+  private def date(year: Int, month: Int, day: Int, hour: Int, minute: Int): LocalDateTime =
+    LocalDateTime.of(year, month, day, hour, minute).nn
+
   def spec = suite("Day04Part1")(
     testM("parse shift start") {
       assertM(day04.GuardEntry.fromString("[1518-11-01 00:00] Guard #10 begins shift"))
-        (equalTo(GuardEntry.ShiftStarts(LocalDateTime.of(1518,11,1,0,0), GuardNum(10))))
+        (equalTo(GuardEntry.ShiftStarts(date(1518,11,1,0,0), GuardNum(10))))
     }
     , testM("parse falls asleep") {
       assertM(day04.GuardEntry.fromString("[1518-11-01 00:05] falls asleep"))
-        (equalTo(GuardEntry.FallsAsleep(LocalDateTime.of(1518,11,1,0,5))))
+        (equalTo(GuardEntry.FallsAsleep(date(1518,11,1,0,5))))
     }
     , testM("parse wakes up") {
       assertM(day04.GuardEntry.fromString("[1518-11-01 00:25] wakes up"))
-        (equalTo(GuardEntry.WakesUp(LocalDateTime.of(1518,11,1,0,25))))
+        (equalTo(GuardEntry.WakesUp(date(1518,11,1,0,25))))
     }
     , testM("sort entries") {
-      val entry1 =GuardEntry.ShiftStarts(LocalDateTime.of(1518,11,1,0,0), GuardNum(10))
-      val entry2 =GuardEntry.FallsAsleep(LocalDateTime.of(1518,11,1,0,5))
-      val entry3 =GuardEntry.WakesUp(LocalDateTime.of(1518,11,1,0,25))
+      val entry1 =GuardEntry.ShiftStarts(date(1518,11,1,0,0), GuardNum(10))
+      val entry2 =GuardEntry.FallsAsleep(date(1518,11,1,0,5))
+      val entry3 =GuardEntry.WakesUp(date(1518,11,1,0,25))
       val entries = List(entry3, entry1, entry2)
       val expected = List(entry1, entry2, entry3)
       ZIO.succeed(assert(entries.sorted)(equalTo(expected)))

@@ -2,6 +2,7 @@ package savinien.aoc18
 package day01
 
 import common._
+import parser.Parsers
 import zio._
 
 class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
@@ -23,7 +24,7 @@ private object ChronalService:
       numbers <- toIntList(data)
     yield numbers
 
-  def toIntList = ZioParser.parseAllToZioList(ZioParser.signedInteger)
+  def toIntList = ZioParser.parseAllToZio(Parsers.signedInteger.lines)
 
   def getRepeat(list: Iterable[Int]) =
     ZIO.succeed(

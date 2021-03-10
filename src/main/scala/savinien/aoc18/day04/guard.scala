@@ -16,7 +16,7 @@ final case class Guard(val number: GuardNum, shiftStart: LocalDateTime, val slee
       case Partial(_) :: _ => ZIO.fail(CantSleepTwice(number, time)) 
 
       case list            => 
-        if time < shiftStart || time.minusMinutes(120) > shiftStart then
+        if time < shiftStart || time.minusMinutes(120).nn > shiftStart then
           IO.fail(NotThisShift(number, shiftStart, time))
         else
           ZIO.succeed(Guard(number, shiftStart, Partial(time) :: list))
