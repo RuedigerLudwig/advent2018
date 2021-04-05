@@ -1,8 +1,8 @@
 package savinien.aoc18
 package dayXX
 
-import common._
-import zio._
+import common.*
+import zio.*
 
 class TemplateService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = ZIO.fail(NotImplemented)

@@ -2,7 +2,7 @@ package savinien.aoc18.common
 
 import java.io.IOException
 import scala.io.Source
-import zio._
+import zio.*
 
 object FileReader:
   private def openFile(path: String): Managed[IOException, Source] =

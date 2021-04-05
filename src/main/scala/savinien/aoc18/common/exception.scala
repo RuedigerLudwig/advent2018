@@ -11,11 +11,8 @@ case object Unreachable extends AdventException:
 case class ThrowableException(error: Throwable) extends AdventException:
   override def toString() = s"Error was raised: $error"
 
-case class ParseError(msg: String, input: String) extends AdventException:
-  override def toString() = s"Error reading data: $msg"
-
 case class ParseFailure(msg: String, input: String) extends AdventException:
-  override def toString() = s"Error reading data: $msg"
+  override def toString() = s"Failure reading data: $msg"
 
 case class MultiError(list: List[AdventException]) extends AdventException:
   override def toString() = list.length match

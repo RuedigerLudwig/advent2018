@@ -1,9 +1,9 @@
 package savinien.aoc18
 package advent
 
-import zio._
-import zio.console._
-import common._
+import zio.*
+import zio.console.*
+import common.*
 
 object Advent extends App:
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
@@ -15,7 +15,7 @@ object Advent extends App:
       else 
         loop(day + 1)
 
-    loop(1).exitCode
+    loop(AllDays.MIN_DAY).exitCode
 
   private def runSingleDay(day: Int) = 
     (runSinglePart(SingleDay.part1, day, 1) *> runSinglePart(SingleDay.part2, day, 2))

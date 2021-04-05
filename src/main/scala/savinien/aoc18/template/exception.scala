@@ -1,7 +1,7 @@
 package savinien.aoc18
 package dayXX
 
-import common._
+import common.*
 
 sealed trait TemplateException extends AdventException
 

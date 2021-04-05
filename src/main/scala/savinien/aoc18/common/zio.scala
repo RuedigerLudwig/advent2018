@@ -1,15 +1,22 @@
 package savinien.aoc18
 package common
 
-import zio._
+import zio.*
 import common.{AdventException, ParseFailure}
-import parser._
+import parser.*
+import StringParsers.Parser
 
 object ZioParser:
-  def parseToZio[A](parser: Parser[A])(word: String): IO[AdventException, (A, String)] =
-    Parsers.parse(parser)(word) match
-      case ParseResult.Failure(error)         => IO.fail(ParseFailure(error.toString, word))
-      case ParseResult.Success(value, parsed) => IO.succeed((value, word.drop(parsed)))
+  def parseToZio[A](parser: Parser[A])(word: String): IO[AdventException, A] =
+    StringParsers.parse(parser)(word) match
+      case Success(value) => IO.succeed(value)
+      case Failure(error) => IO.fail(ParseFailure(error.toString, word))
+      case Error(error) => IO.fail(ParseFailure(error.toString, word))
+      case Fatal(error) => IO.fail(ParseFailure(error.toString, word))
 
   def parseAllToZio[A](parser: Parser[A])(word: String): IO[AdventException, A] =
-    parseToZio(parser.all)(word).map(_._1)
+    StringParsers.parseAll(parser)(word) match
+      case Success(value) => IO.succeed(value)
+      case Failure(error) => IO.fail(ParseFailure(error.toString, word))
+      case Error(error) => IO.fail(ParseFailure(error.toString, word))
+      case Fatal(error) => IO.fail(ParseFailure(error.toString, word))

@@ -3,7 +3,7 @@ package day04
 
 import java.time.LocalDateTime
 import math.Ordered.given
-import zio._
+import zio.*
 import Types.GuardNum
 
 sealed trait SleepCycle

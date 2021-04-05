@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day03
 
-import common._
+import common.*
 
 sealed trait MatterException extends AdventException
 

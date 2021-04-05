@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day04
 
-import common._
+import common.*
 import java.time.LocalDateTime
 import Types.GuardNum
 

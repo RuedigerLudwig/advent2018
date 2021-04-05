@@ -1,9 +1,9 @@
 package savinien.aoc18
 package day02
 
-import zio._
-import common._
-import parser.Parsers
+import zio.*
+import common.*
+import parser.StringParsers.*
 
 class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = 
@@ -21,7 +21,7 @@ class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventStringResult(ticket)
 
 object InventoryService:
-  private[day02] def toStringList = ZioParser.parseAllToZio(AdventParsers.lowerCaseStrings.lines)
+  private[day02] def toStringList = ZioParser.parseAllToZio(lines(lowers))
 
   private[day02] def count_chars(line: String) =
     def count_chars_(line: List[Char], result: Map[Char, Int]): UIO[Map[Char, Int]] =

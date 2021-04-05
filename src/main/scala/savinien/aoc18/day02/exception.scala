@@ -1,7 +1,7 @@
 package savinien.aoc18
 package day02
 
-import common._
+import common.*
 
 sealed trait InventoryException extends AdventException
 

@@ -1,8 +1,8 @@
 package savinien.aoc18
 package day03
 
-import common._
-import zio._
+import common.*
+import zio.*
 
 sealed trait ClaimCount
 case class SingleClaim(claim: Claim) extends ClaimCount

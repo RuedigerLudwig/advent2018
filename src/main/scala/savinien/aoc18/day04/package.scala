@@ -1,7 +1,7 @@
 package savinien.aoc18
 
-import common._
-import zio._
+import common.*
+import zio.*
 
 package object day04:
   def live: URLayer[AdventInput, SingleDay] =

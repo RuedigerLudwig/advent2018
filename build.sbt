@@ -3,9 +3,9 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala     = "3.0.0-RC1"
+  val scala     = "3.0.0-RC1" // metall 0.10.0 needs RC1
   val zio       = "1.0.5"
-  val scalatest = "3.2.6"
+  val scalatest = "3.2.6" // 3.2.7 for RC2
 }
 
 lazy val root =
@@ -46,19 +46,25 @@ lazy val settings =
 
 lazy val commonSettings =
   Seq(
-      name := "advent2018"
+      name := "aoc18"
     , scalaVersion := Version.scala
     , organization := "savinien"
     , scalacOptions ++= Seq(
         "-deprecation"
       , "-explain"
+      , "-explain-types"
+      , "-feature"
       , "-indent"
       , "-new-syntax"
+      , "-unchecked"
       , "-Xfatal-warnings"
+      , "-Xmigration"
       // , "-Ycheck-init"
-      , "-Yrequire-targetName"
       , "-Yexplicit-nulls"
       , "-Yindent-colons"
+      , "-Ykind-projector"
+      , "-Yrequire-targetName"
+      , "-source:future"
     )
   )
 

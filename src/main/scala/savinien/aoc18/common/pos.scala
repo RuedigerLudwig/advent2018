@@ -1,6 +1,6 @@
 package savinien.aoc18.common
 
-import scala.collection._
+import scala.collection.*
 
 case class Pos(x: Int, y: Int)
 

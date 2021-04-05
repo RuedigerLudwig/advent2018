@@ -2,7 +2,7 @@ package savinien
 package aoc18
 package common
 
-import zio._
+import zio.*
 
 type SingleDay = Has[SingleDay.Service]
 

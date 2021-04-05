@@ -1,14 +1,14 @@
 package savinien.aoc18
 package day04
 
-import common._
+import common.*
 import Types.GuardNum
 
 import java.time.LocalDateTime
-import zio._
-import zio.test._
-import zio.test.Assertion._
-import zio.test.mock.Expectation._
+import zio.*
+import zio.test.*
+import zio.test.Assertion.*
+import zio.test.mock.Expectation.*
 
 object Day04Part1Spec extends DefaultRunnableSpec:
   private def date(year: Int, month: Int, day: Int, hour: Int, minute: Int): LocalDateTime =

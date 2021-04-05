@@ -1,0 +1,58 @@
+package savinien.aoc18
+package day05
+
+import common.*
+import zio.*
+import parser.StringParsers.*
+import parser.*
+import scala.language.implicitConversions
+
+class PolymerService(input: AdventInput.Service) extends SingleDay.Service:
+  override def part1 =
+    for
+      data   <- input.getData
+      result <- PolymerService.scanAll(data)
+    yield AdventIntResult(result)
+
+  override def part2 = 
+    for
+      data   <- input.getData
+      result <- PolymerService.scanRemoved(data)
+    yield AdventIntResult(result)
+
+object PolyParsers:
+  private def checkPolymer(use: Char => Boolean): Parser[Int] =
+    def toggleCase(c: Char): Char = if c.isLower then c.toUpper else c.toLower
+    def nextValid: Parser[Char] = item.flatMap:
+      case c if use(c) => pure(c)
+      case _           => nextValid
+
+    def checkNext(toMatch: Option[Char], level: Int): Parser[Option[Int]] = 
+      val tm = toMatch.getOrElse(nextValid.map { toggleCase(_) })
+      nextValid.flatMap { c =>
+        if c == tm then pure(None)
+        else checkNext(Some(toggleCase(c)), level + 1).flatMap:
+          case Some(v) => pure(Some(v))
+          case None    => checkNext(toMatch, level)
+      } | pure(Some(level))
+
+    checkNext(None, 0).map { _.getOrElse(0) }
+
+  def polymer: Parser[Int] = checkPolymer(_ => true)
+  def filteredPolymer(c: Char): Parser[Int] = 
+    val ignore = c.toLower
+    checkPolymer(_.toLower != ignore)
+
+object PolymerService:
+  val scanAll = ZioParser.parseAllToZio(PolyParsers.polymer)
+
+  def scanRemoved(data: String) =
+    val min = ('a' to 'z')
+      .map { c => parse(PolyParsers.filteredPolymer(c))(data) }
+      .map { 
+        case Success(a) => a
+        case _ => Int.MaxValue
+      }
+      .min
+    ZIO.succeed(min)
+      

@@ -1,8 +1,8 @@
 package savinien.aoc18
 package day04
 
-import common._
-import zio._
+import common.*
+import zio.*
 import java.time.Duration
 import Types.{GuardNum, Minute}
 
@@ -34,7 +34,7 @@ object GuardService:
   private[day04] def collectEntries(entries: List[GuardEntry]): IO[GuardException, List[Guard]] =
     ZIO.foldLeft(entries.sorted)(List.empty[Guard]) {
       case (list,          GuardEntry.ShiftStarts(time, id)) => 
-        Guard.shiftStarts(id, time)map(guard => guard :: list)
+        Guard.shiftStarts(id, time).map(guard => guard :: list)
 
       case (guard :: list, GuardEntry.FallsAsleep(time))     => 
         guard.fallAsleep(time).map(guard => guard::list)

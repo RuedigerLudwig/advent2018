@@ -1,6 +1,6 @@
 package savinien.aoc18.common
 
-import zio._
+import zio.*
 
 type AdventInput = Has[AdventInput.Service]
 
