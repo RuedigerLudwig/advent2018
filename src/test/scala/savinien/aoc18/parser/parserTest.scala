@@ -64,6 +64,32 @@ class ParserTest extends AnyFlatSpec:
     val result = parse(parser)(input)
     assert(result == expected)
 
+  it.should("be up to max int") in:
+    val input = Int.MaxValue.toString
+    val parser = unsignedInteger
+    val expected = Success(Int.MaxValue)
+    val result = parse(parser)(input)
+    assert(result == expected)
+
+  it.should("not be greated than max int") in:
+    val input = (Int.MaxValue + 1L).toString
+    val parser = unsignedInteger
+    val result = parse(parser)(input)
+    assert(!result.isSuccess)
+
+  it.should("be up to Min int") in:
+    val input = Int.MinValue.toString
+    val parser = signedInteger
+    val expected = Success(Int.MinValue)
+    val result = parse(parser)(input)
+    assert(result == expected)
+
+  it.should("not be smaller than min int") in:
+    val input = (Int.MinValue - 1L).toString
+    val parser = unsignedInteger
+    val result = parse(parser)(input)
+    assert(!result.isSuccess)
+
   it.should("be found when separated") in:
     val input = "50,42,2"
     val parser = sepby1(unsignedInteger)(char(','))

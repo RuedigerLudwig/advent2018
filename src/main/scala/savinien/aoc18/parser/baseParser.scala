@@ -30,7 +30,7 @@ trait BaseParsers[P[+_]] extends Monad[P]:
 
     def as[B](b: B): P[B] = p1.flatMap { _ => pure(b) }
 
-    def ignore: P[Unit] = p1.as(())
+    def unit: P[Unit] = p1.as(())
 
     def partialMap[B](f: PartialFunction[A, B]): P[B] =
       for
@@ -44,7 +44,7 @@ trait BaseParsers[P[+_]] extends Monad[P]:
         case Right(b) => pure(b)
       }
 
-    def map2[B, C](p2: => P[B])(f: (A, B) => C): P[C] =
+    def zipWith[B, C](p2: => P[B])(f: (A, B) => C): P[C] =
       for
         a <- p1
         b <- p2
@@ -62,24 +62,24 @@ trait BaseParsers[P[+_]] extends Monad[P]:
         b <- foldRight(zero, f)
       yield f(a, b)) | pure(zero)
 
-    def product[B](p2: => P[B]): P[(A, B)] = map2(p2) { (_, _) }
+    def zip[B](p2: => P[B]): P[(A, B)] = zipWith(p2) { (_, _) }
 
-    def prepended[B <: Tuple](p2: => P[B]): P[A *: B] = map2(p2) { _ *: _ }
+    def prepended[B <: Tuple](p2: => P[B]): P[A *: B] = zipWith(p2) { _ *: _ }
 
-    def skipLeft[B](p2: => P[B]): P[B] = map2(p2) { (_, b) => b }
+    def skipLeft[B](p2: => P[B]): P[B] = zipWith(p2) { (_, b) => b }
 
-    def skipRight(p2: => P[Any]): P[A] = map2(p2) { (a, _) => a }
+    def skipRight(p2: => P[Any]): P[A] = zipWith(p2) { (a, _) => a }
 
 
 
-    def many: P[List[A]] = map2(p1.many) { _ :: _} | pure(Nil)
+    def many: P[List[A]] = zipWith(p1.many) { _ :: _} | pure(Nil)
 
-    def many1: P[NonEmptyList[A]] = map2(p1.many) { NonEmptyList(_, _) }
+    def many1: P[NonEmptyList[A]] = zipWith(p1.many) { NonEmptyList(_, _) }
 
     def optional: P[Option[A]] = p1.map(Some(_)) | pure(None)
 
     def lazyOpt[B](p2: => P[B]): P[(Option[A], B)] =
-      p2.map(b => (None, b)) | map2(p2) { (a, b) => (Some(a), b) }
+      p2.map(b => (None, b)) | zipWith(p2) { (a, b) => (Some(a), b) }
 
     def lazyMany[B](p2: => P[B]): P[(List[A], B)] =
       def loop(list: List[A]): P[List[A]] =
@@ -98,7 +98,7 @@ trait BaseParsers[P[+_]] extends Monad[P]:
       p1.sepby1(s).map(_.toList) | pure(Nil)
 
     def sepby1(s: P[Any]): P[NonEmptyList[A]] =
-      map2(s.skipLeft(p1).*) { NonEmptyList(_, _) }
+      zipWith(s.skipLeft(p1).*) { NonEmptyList(_, _) }
 
     def bracket(open: => P[Any], close: => P[Any]): P[A] =
       for
@@ -109,14 +109,14 @@ trait BaseParsers[P[+_]] extends Monad[P]:
 
     def repeat(n: Int): P[List[A]] =
       if n <= 0 then pure(Nil)
-      else map2(repeat(n-1)) { _ :: _ }
+      else zipWith(repeat(n-1)) { _ :: _ }
 
     def repeatMax(n: Int): P[List[A]] =
       if n <= 0 then pure(Nil)
-      else map2(p1.repeatMax(n - 1)) { _ :: _ } | pure(Nil)
+      else zipWith(p1.repeatMax(n - 1)) { _ :: _ } | pure(Nil)
 
     def repeatBetween(min: Int)(max: Int): P[List[A]] =
-      repeat(min).map2(repeatMax(max - min)) { _ ::: _ }
+      repeat(min).zipWith(repeatMax(max - min)) { _ ::: _ }
 
     @targetName("opMany")
     def `*`: P[List[A]] = p1.many
@@ -159,7 +159,7 @@ trait BaseParsers[P[+_]] extends Monad[P]:
     def `^??`(f: A => Either[ParserError, B]): P[B] = p1.eitherMap(f)
 
     @targetName("opProduct")
-    def `~:`(p2: => P[B]): P[(A, B)] = p1.product(p2)
+    def `~:`(p2: => P[B]): P[(A, B)] = p1.zip(p2)
 
     @targetName("opSkipLeft")
     def `*>`(p2: => P[B]): P[B] = p1.skipLeft(p2)
