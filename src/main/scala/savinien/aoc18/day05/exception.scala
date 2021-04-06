@@ -5,6 +5,5 @@ import common.*
 
 sealed trait PolymerException extends AdventException
 
-case class ParseException(message: String) extends PolymerException {
-  override def toString() = s"Error while Parsing Polymer: $message"
-}
+case object NoMinimum extends PolymerException:
+  override def toString() = "Did not find any Minimum"

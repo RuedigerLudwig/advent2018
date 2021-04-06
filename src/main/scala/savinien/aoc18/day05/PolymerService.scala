@@ -23,6 +23,7 @@ class PolymerService(input: AdventInput.Service) extends SingleDay.Service:
 object PolyParsers:
   private def checkPolymer(use: Char => Boolean): Parser[Int] =
     def toggleCase(c: Char): Char = if c.isLower then c.toUpper else c.toLower
+
     def nextValid: Parser[Char] = item.flatMap:
       case c if use(c) => pure(c)
       case _           => nextValid
@@ -32,8 +33,8 @@ object PolyParsers:
       nextValid.flatMap { c =>
         if c == tm then pure(None)
         else checkNext(Some(toggleCase(c)), level + 1).flatMap:
-          case Some(v) => pure(Some(v))
-          case None    => checkNext(toMatch, level)
+          case None   => checkNext(toMatch, level)
+          case result => pure(result)
       } | pure(Some(level))
 
     checkNext(None, 0).map { _.getOrElse(0) }
@@ -44,15 +45,16 @@ object PolyParsers:
     checkPolymer(_.toLower != ignore)
 
 object PolymerService:
-  val scanAll = ZioParser.parseAllToZio(PolyParsers.polymer)
+  def scanAll = ZioParser.parseAllToZio(PolyParsers.polymer)
 
-  def scanRemoved(data: String) =
-    val min = ('a' to 'z')
-      .map { c => parse(PolyParsers.filteredPolymer(c))(data) }
-      .map { 
-        case Success(a) => a
-        case _ => Int.MaxValue
-      }
-      .min
-    ZIO.succeed(min)
-      
+  def scanRemoved(data: String): IO[AdventException, Int] =
+    for
+      ref    <- Ref.make(Option.empty[Int])
+      _      <- ZIO.foreachPar('a' to 'z'):
+                  c => parse(PolyParsers.filteredPolymer(c))(data) match
+                    case Success(curr) => ref.update:
+                      _.map(_.min(curr)).orElse(Some(curr))
+                    case _ => ZIO.unit
+      min    <- ref.get
+      result <- ZIO.getOrFailWith(NoMinimum)(min)
+    yield result
