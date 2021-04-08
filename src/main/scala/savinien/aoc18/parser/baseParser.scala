@@ -38,11 +38,11 @@ trait BaseParsers[P[+_]] extends Monad[P]:
         if f.isDefinedAt(a)
       yield f(a)
 
-    def eitherMap[B](f: A => Either[ParserError, B]): P[B] =
-      p1.flatMap { f(_) match
+    def eitherMap[B](f: A => Either[ParserError, B]): P[B] = p1.flatMap {
+      f(_) match
         case Left(e) => fail(e)
         case Right(b) => pure(b)
-      }
+    }
 
     def zipWith[B, C](p2: => P[B])(f: (A, B) => C): P[C] =
       for

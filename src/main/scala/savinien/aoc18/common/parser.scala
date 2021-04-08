@@ -3,7 +3,6 @@ package common
 
 import parser.ParserError
 import parser.StringParsers
-import scala.language.implicitConversions
 import scala.util.Try
 import java.time.{LocalDateTime, LocalDate, LocalTime}
 

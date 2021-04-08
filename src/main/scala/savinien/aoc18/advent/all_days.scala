@@ -12,6 +12,6 @@ object AllDays:
   )
 
   val MAX_DAY = finished.length
-  val MIN_DAY = 1
+  val MIN_DAY = MAX_DAY
 
   def getDay(day: Int) = finished(day - 1)

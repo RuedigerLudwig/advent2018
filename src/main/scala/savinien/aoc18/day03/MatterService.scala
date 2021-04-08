@@ -30,30 +30,34 @@ object MatterService:
   private[day03] def getFabric(claims: List[Claim]): UIO[Map[Pos, ClaimCount]] =
     for 
       ref  <- Ref.make(Map.empty[Pos, ClaimCount])
-      _    <- ZIO.foreachPar(claims):
-                claim => ZIO.foreachPar (claim.area.cells):
-                  pos => ref.update:
+      _    <- ZIO.foreachPar(claims) {
+                claim => ZIO.foreachPar (claim.area.cells) {
+                  pos => ref.update {
                     map => 
                       map.get(pos) match
                         case None                 => map + (pos -> SingleClaim(claim))
                         case Some(SingleClaim(_)) => map + (pos -> MultiClaim)
                         case Some(MultiClaim)     => map
+              }}}
       result <- ref.get
     yield result
 
   private[day03] def getMultiClaimCount(claims: List[Claim]): UIO[Int] =
-    getFabric(claims).map:
-      _.values.foldLeft(0):
+    getFabric(claims).map {
+      _.values.foldLeft(0) {
         case (count, MultiClaim) => count + 1
         case (count, _)          => count 
+    }}
 
   private[day03] def findAllSingleClaims(fabric: Iterable[ClaimCount]): UIO[Map[Claim, Int]] =
     for
       ref    <- Ref.make(Map.empty[Claim, Int])
-      _      <- ZIO.foreachPar (fabric):
-                  case SingleClaim(claim) => ref.update:
-                                              _.updatedWith(claim) { _.map(_ + 1).orElse(Some(1)) }
+      _      <- ZIO.foreachPar (fabric) {
+                  case SingleClaim(claim) => ref.update {
+                                               _.updatedWith(claim) { _.map(_ + 1).orElse(Some(1)) }
+                                             }
                   case _                  => ZIO.unit
+                }
       result <- ref.get
     yield result
 
@@ -61,8 +65,9 @@ object MatterService:
     for
       fabric     <- getFabric(claims)
       allSingle  <- findAllSingleClaims(fabric.values)
-      results    <- ZIO.filter (allSingle):
+      results    <- ZIO.filter (allSingle) {
                       case (claim, count) => ZIO.succeed(claim.area.size == count)
+                    }  
       result     <- 
         if results.isEmpty then
           ZIO.fail(NoSolitaireFound)
