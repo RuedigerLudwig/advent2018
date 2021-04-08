@@ -1,7 +1,6 @@
 package savinien.aoc18
 package parser
 
-import scala.util.Try
 
 object StringParsers extends StringParsers
 
@@ -27,13 +26,14 @@ trait StringParsers extends TrampolineParsers[Char, String]:
 
   def sat(pre: Char => Boolean): Parser[Char] = filter(item)(pre)
 
-  def char(c: Char): Parser[Char] = sat { _ == c }
-  def digit:         Parser[Char] = sat { _.isDigit }
-  def lower:         Parser[Char] = sat { _.isLower }
-  def upper:         Parser[Char] = sat { _.isUpper }
-  def whitespace:    Parser[Char] = sat { _.isWhitespace }
-  def letter:        Parser[Char] = lower | upper
-  def alphanum:      Parser[Char] = letter | digit
+  def char(c: Char):   Parser[Char] = sat { _ == c }
+  def digit:           Parser[Char] = sat { _.isDigit }
+  def lower:           Parser[Char] = sat { _.isLower }
+  def upper:           Parser[Char] = sat { _.isUpper }
+  def whitespace:      Parser[Char] = sat { _.isWhitespace }
+  def horizontalspace: Parser[Char] = sat { c => c.isWhitespace && !"\n\r".contains(c) }
+  def letter:          Parser[Char] = lower | upper
+  def alphanum:        Parser[Char] = letter | digit
 
   def oneOf(s: String): Parser[Char] = sat {  s.contains(_) }
 
@@ -48,16 +48,5 @@ trait StringParsers extends TrampolineParsers[Char, String]:
   def uppers: Parser[String] = merge(upper)
   def word:   Parser[String] = merge(letter)
   def space:  Parser[Unit]   = whitespace.*.unit
-
-  private def checkedInt(s: String): Either[ParserError, Int] =
-    Try(s.toInt)
-      .fold(_ => Left(new ParserError(s"Cannot be converted to Int: $s")), Right(_))
-
-  def unsignedInteger: Parser[Int] = digits ^?? { checkedInt(_) }
-  def signedInteger: Parser[Int] = oneOf("+-").? ~: digits ^?? {
-    case (Some('-'), num) => checkedInt("-" + num)
-    case (_,         num) => checkedInt(num)
-  }
-
-  def lines[A](p: Parser[A]): Parser[List[A]] = sepby(p)(endOfLine) <* endOfLine.?
+  def hspace: Parser[Unit]   = horizontalspace.*.unit
 end StringParsers

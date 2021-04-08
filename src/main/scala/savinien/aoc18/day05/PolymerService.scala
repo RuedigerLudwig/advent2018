@@ -30,9 +30,8 @@ object PolyParsers:
     }
 
     def checkNext(toMatch: Option[Char], level: Int): Parser[Option[Int]] = 
-      val tm = toMatch.getOrElse(nextValid.map { toggleCase(_) })
       nextValid.flatMap { c =>
-        if c == tm then pure(None)
+        if toMatch.map(_==c).getOrElse(false) then pure(None)
         else checkNext(Some(toggleCase(c)), level + 1).flatMap {
           case None   => checkNext(toMatch, level)
           case result => pure(result)

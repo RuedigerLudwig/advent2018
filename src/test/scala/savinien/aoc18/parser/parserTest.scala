@@ -8,7 +8,7 @@ import flatspec.AnyFlatSpec
 import scala.util.Random
 import Nel.NonEmptyList
 
-import StringParsers.*
+import TokenParsers.*
 
 class ParserTest extends AnyFlatSpec:
   "a string parser".should("be matched") in {

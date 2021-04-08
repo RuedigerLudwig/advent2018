@@ -2,7 +2,7 @@ package savinien.aoc18
 package day03
 
 import common.*
-import parser.StringParsers.*
+import parser.TokenParsers.*
 import scala.language.implicitConversions
 
 case class Claim private(number: Int, area: Area)

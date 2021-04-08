@@ -2,7 +2,7 @@ package savinien.aoc18
 package day04
 
 import common.*
-import AdventParsers.*
+import parser.TokenParsers.*
 import scala.language.implicitConversions
 import java.time.{LocalDateTime, DateTimeException}
 import zio.*
@@ -16,7 +16,7 @@ enum GuardEntry(time: LocalDateTime):
   def getTime = time
 
 object GuardEntry:
-  def guardTimeParser: Parser[LocalDateTime] = dateTimeParser.bracket(char('['), char(']')) <* space
+  def guardTimeParser: Parser[LocalDateTime] = token(dateTimeParser.bracket(char('['), char(']')))
 
   def wakeUpParser:      Parser[GuardEntry] = guardTimeParser <* string("wakes up") ^^ { case time => WakesUp(time) }
   def fallsAsleepParser: Parser[GuardEntry] = guardTimeParser <* string("falls asleep") ^^ { case time => FallsAsleep(time) }
