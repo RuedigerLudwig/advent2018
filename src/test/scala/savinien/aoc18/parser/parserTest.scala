@@ -89,7 +89,7 @@ class ParserTest extends AnyFlatSpec:
 
   it.should("be up to Min int") in {
     val input = Int.MinValue.toString
-    val parser = signedInteger
+    val parser = integer
     val expected = Success(Int.MinValue)
     val result = parse(parser)(input)
     assert(result == expected)

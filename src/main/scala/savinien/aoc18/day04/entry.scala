@@ -16,7 +16,7 @@ enum GuardEntry(time: LocalDateTime):
   def getTime = time
 
 object GuardEntry:
-  def guardTimeParser: Parser[LocalDateTime] = token(dateTimeParser.bracket(char('['), char(']')))
+  def guardTimeParser: Parser[LocalDateTime] = dateTimeParser.inSquares.token
 
   def wakeUpParser:      Parser[GuardEntry] = guardTimeParser <* string("wakes up") ^^ { case time => WakesUp(time) }
   def fallsAsleepParser: Parser[GuardEntry] = guardTimeParser <* string("falls asleep") ^^ { case time => FallsAsleep(time) }

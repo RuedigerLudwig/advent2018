@@ -7,28 +7,36 @@ object TokenParsers extends TokenParsers
 
 trait TokenParsers extends StringParsers:
   private def checkedFun[A, B](f: (A => B)): PartialFunction[A, B] = new PartialFunction {
-    def apply(input: A): B = f(input)
-    def isDefinedAt(input: A) = Try(f(input)).isSuccess
+    private val cache                   = collection.mutable.Map.empty[A, Try[B]]
+    private def check(input: A): Try[B] = cache.getOrElseUpdate(input, Try(f(input)))
+    override def apply(input: A): B     = check(input).get
+    override def isDefinedAt(input: A)  = check(input).isSuccess
   }
 
   private def checkedInt  = checkedFun[String, Int](_.toInt)
   private def checkedTime = checkedFun[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
   private def checkedDate = checkedFun[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)
 
-  def token[A](t: Parser[A]): Parser[A] = t.bracket(hspace, hspace)
-
   def unsignedInteger: Parser[Int] = digits ^? checkedInt
-  def signedInteger: Parser[Int] = oneOf("+-").? ~: digits ^^ { (minus, num) => minus.map(c => s"$c$num").getOrElse(num) } ^? checkedInt
+  def integer: Parser[Int] = oneOf("+-").? ~: digits ^^ { 
+    (minus, num) => minus.map(c => s"$c$num").getOrElse(num) 
+  } ^? checkedInt
 
   def timeParser: Parser[LocalTime] = 
-    token(unsignedInteger ~: (char(':') *> unsignedInteger) ^? checkedTime)
+    unsignedInteger.tupSep2(char(':')).token ^? checkedTime
 
   def dateParser: Parser[LocalDate] = 
-    token(unsignedInteger ~: (char('-') *> unsignedInteger) ~: (char('-') *> unsignedInteger) ^? checkedDate)
+    unsignedInteger.tupSep3(char('-')).token ^? checkedDate
 
   def dateTimeParser: Parser[LocalDateTime] = dateParser ~: timeParser ^^ {
     case (date, time) => LocalDateTime.of(date, time).nn
   }
 
-  def lines[A](p: Parser[A]): Parser[List[A]] = sepby(p)(endOfLine) <* endOfLine.?
+  extension [A](p: Parser[A])
+    def token:     Parser[A] = p.bracket(hspace, hspace)
+    def inSquares: Parser[A] = p.bracket(char('['), char(']'))
+    def inParens:  Parser[A] = p.bracket(char('('), char(')'))
+    def inCurly:   Parser[A] = p.bracket(char('{'), char('}'))
+
+    def lines: Parser[List[A]] = p.sepby(endOfLine) <* endOfLine.?
 end TokenParsers

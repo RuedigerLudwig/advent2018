@@ -24,7 +24,7 @@ private object ChronalService:
       numbers <- toIntList(data)
     yield numbers
 
-  def toIntList = ZioParser.parseAllToZio(lines(signedInteger))
+  def toIntList = ZioParser.parseAllToZio(integer.lines)
 
   def getRepeat(list: Iterable[Int]) =
     ZIO.succeed(

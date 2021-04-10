@@ -94,6 +94,9 @@ trait BaseParsers[P[+_]] extends Monad[P]:
     def sepby1(s: P[Any]): P[NonEmptyList[A]] =
       zipWith(s.skipLeft(p1).*) { NonEmptyList(_, _) }
 
+    def tupSep2(s: P[Any]): P[(A, A)]    = (p1 <* s) ~: p1
+    def tupSep3(s: P[Any]): P[(A, A, A)] = (p1 <* s) ~: tupSep2(s)
+
     def bracket(open: => P[Any], close: => P[Any]): P[A] =
       for
         _ <- open

@@ -27,9 +27,9 @@ object MatterService:
   /**
    * This could be solved without Ref or Par. But I thought it was a good exercise
    */
-  private[day03] def getFabric(claims: List[Claim]): UIO[Map[Pos, ClaimCount]] =
+  private[day03] def getFabric(claims: List[Claim]): UIO[Map[Pos[Int], ClaimCount]] =
     for 
-      ref  <- Ref.make(Map.empty[Pos, ClaimCount])
+      ref  <- Ref.make(Map.empty[Pos[Int], ClaimCount])
       _    <- ZIO.foreachPar(claims) {
                 claim => ZIO.foreachPar (claim.area.cells) {
                   pos => ref.update {

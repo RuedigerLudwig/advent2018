@@ -5,7 +5,7 @@ import common.*
 import parser.TokenParsers.*
 import scala.language.implicitConversions
 
-case class Claim private(number: Int, area: Area)
+case class Claim private(number: Int, area: Area[Int])
 
 object Claim:
   def apply(number: Int, left: Int, top: Int, width: Int, height: Int) =
