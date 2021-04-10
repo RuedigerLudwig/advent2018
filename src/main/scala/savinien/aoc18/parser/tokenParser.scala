@@ -6,20 +6,20 @@ import java.time.{LocalDateTime, LocalDate, LocalTime}
 object TokenParsers extends TokenParsers
 
 trait TokenParsers extends StringParsers:
-  private def checkedFun[A, B](f: (A => B)): PartialFunction[A, B] = new PartialFunction {
+  private def checkedTry[A, B](f: (A => B)): PartialFunction[A, B] = new PartialFunction:
     private val cache                   = collection.mutable.Map.empty[A, Try[B]]
     private def check(input: A): Try[B] = cache.getOrElseUpdate(input, Try(f(input)))
     override def apply(input: A): B     = check(input).get
     override def isDefinedAt(input: A)  = check(input).isSuccess
-  }
 
-  private def checkedInt  = checkedFun[String, Int](_.toInt)
-  private def checkedTime = checkedFun[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
-  private def checkedDate = checkedFun[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)
+  private def checkedInt  = checkedTry[String, Int](_.toInt)
+  private def checkedTime = checkedTry[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
+  private def checkedDate = checkedTry[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)
 
   def unsignedInteger: Parser[Int] = digits ^? checkedInt
   def integer: Parser[Int] = oneOf("+-").? ~: digits ^^ { 
-    (minus, num) => minus.map(c => s"$c$num").getOrElse(num) 
+    case (Some('-'), num) => s"-$num"
+    case (_,         num) => num
   } ^? checkedInt
 
   def timeParser: Parser[LocalTime] = 

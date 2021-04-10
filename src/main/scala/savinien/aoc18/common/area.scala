@@ -19,9 +19,6 @@ case class Area[T: Numeric] private(val bottomLeft: Pos[T], val topRight: Pos[T]
       override def hasNext = runY < topRight.y
 
       override def next: Pos[T] =
-        if runY >= topRight.y then
-          throw IndexOutOfBoundsException("Iterator has finished")
-
         val result = Pos(runX, runY)
         runX = runX + one
         if runX >= topRight.x then

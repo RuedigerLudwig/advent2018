@@ -14,10 +14,6 @@ object Pos:
     def `+`(p2: Pos[T]): Pos[T] =
       new Pos(p.x + p2.x, p.y + p2.y)
 
-    @targetName("opAddTuple")
-    def `+`(p2: (T, T)): Pos[T] =
-      new Pos(p.x + p2._1, p.y + p2._2)
-
 object posParsers:
   import parser.TokenParsers.*
   def posParser: Parser[Pos[Int]] = integer.tupSep2(char(',').token) ^^ { case (x, y) => Pos(x, y) }
