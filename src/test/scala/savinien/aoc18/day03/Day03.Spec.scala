@@ -10,10 +10,10 @@ import zio.test.mock.Expectation.*
 object Day03Part1Spec extends DefaultRunnableSpec:
   def spec = suite("Day03Part1") (
     testM("extract claim") {
-      assertM(day03.Claim.fromString("#123 @ 3,2: 5x4"))(equalTo(Claim(123, 3, 2, 5, 4)))
+      assertM(day03.Claim.fromString("#123 @ 3,2: 5x4"))(equalTo(Claim(123, Area(Pos(3, 2), Pos(8, 6)))))
     }
     , testM("simple crossover") {
-      val claim = Claim(1, 3, 2, 5, 4)
+      val claim = Claim(1, Area(Pos(3, 2), Pos(8, 6)))
       val claims = List(claim)
       val sc = SingleClaim(claim)
       val expected = Map ( 
@@ -25,7 +25,7 @@ object Day03Part1Spec extends DefaultRunnableSpec:
       assertM(day03.MatterService.getFabric(claims))(equalTo(expected))
     }
     , testM("only crossover") {
-      val claims = List(Claim(1, 1, 3, 4, 4), Claim(2,3,1,4,4), Claim(3,5,5,2,2))
+      val claims = List(Claim(1, Area(Pos(1, 3), Pos(5, 7))), Claim(2, Area(Pos(3, 1), Pos(7, 5))), Claim(3, Area(Pos(5, 5), Pos(7, 7))))
       val expected = 4
       assertM(day03.MatterService.getMultiClaimCount(claims))(equalTo(expected))
     }
@@ -41,9 +41,9 @@ object Day03Part1Spec extends DefaultRunnableSpec:
 object Day03Part2Spec extends DefaultRunnableSpec:
   def spec = suite("Day03Part2") (
     testM("all single claims") {
-      val claim1 = Claim(1, 1, 3, 4, 4)
-      val claim2 = Claim(2,3,1,4,4)
-      val claim3 = Claim(3,5,5,2,2)
+      val claim1 = Claim(1, Area(Pos(1, 3), Pos(5, 7)))
+      val claim2 = Claim(2, Area(Pos(3, 1), Pos(7, 5)))
+      val claim3 = Claim(3, Area(Pos(5, 5), Pos(7, 7)))
       val claims = List(claim1, claim2, claim3)
       val expected = Map(claim1 -> 12, claim2 -> 12, claim3 -> 4)
       assertM(
@@ -54,8 +54,8 @@ object Day03Part2Spec extends DefaultRunnableSpec:
       )(equalTo(expected))
     }
     , testM("only crossover") {
-      val claims = List(Claim(1, 1, 3, 4, 4), Claim(2,3,1,4,4), Claim(3,5,5,2,2))
-      val expected = Claim(3,5,5,2,2)
+      val claims = List(Claim(1, Area(Pos(1, 3), Pos(5, 7))), Claim(2, Area(Pos(7, 5), Pos(4, 4))), Claim(3, Area(Pos(5, 5), Pos(7, 7))))
+      val expected = Claim(3, Area(Pos(5, 5), Pos(7, 7)))
       assertM(day03.MatterService.findSolitaireClaim(claims))(equalTo(expected))
     }
     , testM("day03 part2") {

@@ -8,13 +8,11 @@ import scala.language.implicitConversions
 case class Claim private(number: Int, area: Area[Int])
 
 object Claim:
-  def apply(number: Int, left: Int, top: Int, width: Int, height: Int) =
-    new Claim(number, Area(Pos(left, top), Pos(left+width-1, top+height-1)))
+  def apply(number: Int, area: Area[Int]) =
+    new Claim(number, area)
 
   def parser =
-    (char('#') *> unsignedInteger) ~: (string(" @ ") *> unsignedInteger) ~: (char(',') *> unsignedInteger) ~: (string(": ") *> unsignedInteger) ~: (char('x') *> unsignedInteger) ^^ {
-      case (number, left, top, width, height) => Claim(number, left, top, width, height)
-    }
+    (char('#') *> unsignedInteger) ~: (string(" @ ") *> areaParsers.areaWidthParser) ^^ {  case (number, area) => Claim(number, area) }
   
   def fromStringList = ZioParser.parseAllToZio(lines(Claim.parser))
 
