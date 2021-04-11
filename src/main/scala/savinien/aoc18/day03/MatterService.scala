@@ -1,12 +1,10 @@
 package savinien.aoc18
 package day03
 
+import scala.annotation.tailrec
+
 import common.*
 import zio.*
-
-sealed trait ClaimCount
-case class SingleClaim(claim: Claim) extends ClaimCount
-case object MultiClaim extends ClaimCount
 
 class MatterService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 =
@@ -24,57 +22,41 @@ class MatterService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventIntResult(solitaire.number)
 
 object MatterService:
-  /**
-   * This could be solved without Ref or Par. But I thought it was a good exercise
-   */
-  private[day03] def getFabric(claims: List[Claim]): UIO[Map[Pos[Int], ClaimCount]] =
-    for 
-      ref  <- Ref.make(Map.empty[Pos[Int], ClaimCount])
-      _    <- ZIO.foreachPar(claims) {
-                claim => ZIO.foreachPar (claim.area.cells) {
-                  pos => ref.update {
-                    map => 
-                      map.get(pos) match
-                        case None                 => map + (pos -> SingleClaim(claim))
-                        case Some(SingleClaim(_)) => map + (pos -> MultiClaim)
-                        case Some(MultiClaim)     => map
-              }}}
-      result <- ref.get
-    yield result
-
   private[day03] def getMultiClaimCount(claims: List[Claim]): UIO[Int] =
-    getFabric(claims).map {
-      _.values.foldLeft(0) {
-        case (count, MultiClaim) => count + 1
-        case (count, _)          => count 
-    }}
+    @tailrec
+    def unionLoop(claim: Claim, others: List[Claim], result: Set[Pos[Int]]): Set[Pos[Int]] = others match
+      case Nil          => result
+      case head :: tail => 
+        if claim.number == head.number then unionLoop(claim, tail, result)
+        else claim.area.union(head.area) match
+          case None => unionLoop(claim, tail, result)
+          case Some(union) =>
+            val newResult = result ++ union.cells
+            if newResult.size == claim.area.size then newResult
+            else unionLoop(claim, tail, newResult)
 
-  private[day03] def findAllSingleClaims(fabric: Iterable[ClaimCount]): UIO[Map[Claim, Int]] =
-    for
-      ref    <- Ref.make(Map.empty[Claim, Int])
-      _      <- ZIO.foreachPar (fabric) {
-                  case SingleClaim(claim) => ref.update {
-                                               _.updatedWith(claim) { _.map(_ + 1).orElse(Some(1)) }
-                                             }
-                  case _                  => ZIO.unit
-                }
-      result <- ref.get
-    yield result
+    @tailrec
+    def loop(rest: List[Claim], result: Set[Pos[Int]]): Set[Pos[Int]] = rest match
+      case Nil => result
+      case head :: tail => 
+        val newResult = unionLoop(head, claims, Set.empty) 
+        loop(tail, newResult ++ result)
+
+    UIO.succeed(loop(claims, Set.empty).size)
 
   private[day03] def findSolitaireClaim(claims: List[Claim]): IO[AdventException, Claim] =
-    for
-      fabric     <- getFabric(claims)
-      allSingle  <- findAllSingleClaims(fabric.values)
-      results    <- ZIO.filter (allSingle) {
-                      case (claim, count) => ZIO.succeed(claim.area.size == count)
-                    }  
-      result     <- 
-        if results.isEmpty then
-          ZIO.fail(NoSolitaireFound)
-        else if !results.tail.isEmpty then
-          ZIO.fail(TooManySolitaireFound)
-        else
-          ZIO.succeed(results.head._1)
-    yield result
-      
+    @tailrec
+    def isSolitaire(others: List[Claim])(claim: Claim): Boolean = others match
+      case Nil          => true
+      case head :: tail => 
+        if claim.number == head.number then isSolitaire(tail)(claim)
+        else claim.area.union(head.area) match
+            case None => isSolitaire(tail)(claim)
+            case Some(_) => false
+
+    claims.filter(isSolitaire(claims)) match
+      case Nil           => IO.fail(NoSolitaireFound)
+      case result :: Nil => IO.succeed(result)
+      case _             => IO.fail(TooManySolitaireFound)
+
 end MatterService

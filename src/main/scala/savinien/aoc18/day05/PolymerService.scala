@@ -5,7 +5,6 @@ import common.*
 import zio.*
 import parser.StringParsers.*
 import parser.*
-import scala.language.implicitConversions
 
 class PolymerService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 =

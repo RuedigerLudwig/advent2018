@@ -112,7 +112,7 @@ class ParserTest extends AnyFlatSpec:
 
   it.should("be found when bracketed") in {
     val input = "[50,42,2]"
-    val parser = unsignedInteger.sepby1(char(',')).bracket(char('['), char(']'))
+    val parser = unsignedInteger.sepby1(char(',')).between(char('['), char(']'))
     val expected = Success(List(50, 42, 2))
     val result = parse(parser)(input)
     assert(result == expected)
@@ -401,8 +401,8 @@ class ParserTest extends AnyFlatSpec:
     assert(result == expected)
   }
 
-  "trampolines".should("never produce a stack overflow") in {
-    val list = (1 to 100_000).map(_ => "0123456789"(Random.nextInt(10)))
+  "trampolines".should("not produce a stack overflow") in {
+    val list = (1 to 100_000).map(_ => (Random.nextInt(10) + '0').toChar)
     val input = list.mkString + '!'
     val parser = digit.* ~: char('!')
     val expected = Success((list, '!'))
