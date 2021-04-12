@@ -59,7 +59,7 @@ object GuardService:
       }
 
   private[day04] def sumSleepingTime(list: List[FullSleep]): Long =
-    list.map { case FullSleep(fa, wu) => Duration.between(fa, wu).toMinutes() }.sum
+    list.map { case FullSleep(fa, wu) => Duration.between(fa, wu).nn.toMinutes() }.sum
    
   private[day04] def optimalGuard(map: Map[GuardNum, List[FullSleep]]): IO[GuardException, (GuardNum, List[FullSleep])] =
       val (_, result) = map.foldLeft((-1L, Option.empty[(GuardNum, List[FullSleep])])) {

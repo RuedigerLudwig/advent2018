@@ -40,4 +40,4 @@ class StringParserState private(str: String, offset: Int) extends ParserState[Ch
       str.substring(offset).nn
 
   private def noLineBreak(str: String): String =
-    str.replaceAll("\n\r", "⬎").replaceAll("\n", "⬎").replaceAll("\r", "⬎").nn
+    str.replaceAll("\n\r", "⬎").nn.replaceAll("\n", "⬎").nn.replaceAll("\r", "⬎").nn

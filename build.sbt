@@ -3,9 +3,9 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala     = "3.0.0-RC1" // zio >1.0.5 missing for RC2
-  val zio       = "1.0.5"     // No support for RC2
-  val scalatest = "3.2.6"     // 3.2.7 exists for RC2
+  val scala     = "3.0.0-RC2"
+  val zio       = "1.0.6"
+  val scalatest = "3.2.7"
 }
 
 lazy val root =
