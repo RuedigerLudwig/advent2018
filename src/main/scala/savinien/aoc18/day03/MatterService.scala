@@ -4,6 +4,8 @@ package day03
 import scala.annotation.tailrec
 
 import common.*
+import common.pos.Pos
+
 import zio.*
 
 class MatterService(input: AdventInput.Service) extends SingleDay.Service:
@@ -28,7 +30,7 @@ object MatterService:
       case Nil          => result
       case head :: tail => 
         if claim.number == head.number then unionLoop(claim, tail, result)
-        else claim.area.union(head.area) match
+        else claim.area + head.area match
           case None => unionLoop(claim, tail, result)
           case Some(union) =>
             val newResult = result ++ union.cells
@@ -50,9 +52,9 @@ object MatterService:
       case Nil          => true
       case head :: tail => 
         if claim.number == head.number then isSolitaire(tail)(claim)
-        else claim.area.union(head.area) match
-            case None => isSolitaire(tail)(claim)
-            case Some(_) => false
+        else claim.area + head.area match
+          case None => isSolitaire(tail)(claim)
+          case Some(_) => false
 
     claims.filter(isSolitaire(claims)) match
       case Nil           => IO.fail(NoSolitaireFound)

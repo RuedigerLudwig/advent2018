@@ -45,7 +45,7 @@ object PolyParsers:
     checkPolymer(_.toLower != ignore)
 
 object PolymerService:
-  def scanAll = ZioParser.parseAllToZio(PolyParsers.polymer)
+  def scanAll = ZioParse.parseAllToZio(PolyParsers.polymer)
 
   def scanRemoved(data: String): IO[AdventException, Int] =
     for

@@ -14,6 +14,12 @@ trait TokenParsers extends StringParsers:
     override def apply(input: A): B     = check(input).get
     override def isDefinedAt(input: A)  = check(input).isSuccess
 
+  private def checkedOption[A, B](f: (A => Option[B])): PartialFunction[A, B] = new PartialFunction:
+    private val cache                      = collection.mutable.Map.empty[A, Option[B]]
+    private def check(input: A): Option[B] = cache.getOrElseUpdate(input, f(input))
+    override def apply(input: A): B        = check(input).get
+    override def isDefinedAt(input: A)     = check(input).isDefined
+
   private def checkedInt  = checkedTry[String, Int](_.toInt)
   private def checkedTime = checkedTry[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
   private def checkedDate = checkedTry[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)

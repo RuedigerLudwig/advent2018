@@ -96,19 +96,19 @@ object GuardService:
     for FullSleep(fa, wu) <- list do
       for min <- fa.getMinute() until wu.getMinute() do
         minutes(min) = minutes(min) + 1
-    var max = minutes(0)
-    var bestMinute: Option[Int] = Some(0)
-    for min <- 1 until 60 do
-      val curr = minutes(min)
-      if curr > max then
-        max = curr
-        bestMinute = Some(min)
-      else if curr == max then
-        bestMinute = None
+
+    val (bestMinute, max) =
+      (1 until 60).foldLeft((Option(0), minutes(0))) {
+        case ((bestMinute, max), minute) =>
+          val curr = minutes(minute)
+          if curr > max then      (Option(minute), curr)
+          else if curr < max then (bestMinute, max)
+          else                    (None, max)
+      }
 
     ZIO
       .fromOption(bestMinute)
       .map(minute => (Minute(minute), max))
-      .mapError( _ => MoreThanOneMaxMinute)
+      .mapError(_ => MoreThanOneMaxMinute)
 
 end GuardService

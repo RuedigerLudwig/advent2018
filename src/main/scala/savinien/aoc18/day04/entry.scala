@@ -25,8 +25,8 @@ object GuardEntry:
 
   def entryParser: Parser[GuardEntry] = wakeUpParser | fallsAsleepParser | shiftStartsParser
 
-  def fromString(input: String) = ZioParser.parseAllToZio(entryParser)(input)
-  def fromStringList(input: String) = ZioParser.parseAllToZio(lines(entryParser))(input)
+  def fromString(input: String) = ZioParse.parseAllToZio(entryParser)(input)
+  def fromStringList(input: String) = ZioParse.parseAllToZio(lines(entryParser))(input)
 
   given Ordering[GuardEntry] = Ordering.by(_.getTime)
 end GuardEntry

@@ -5,7 +5,9 @@ import scala.language.adhocExtensions
 
 import common.*
 import parser.Success
-import areaParsers.*
+import common.pos.Pos
+import common.area.Area
+import common.area.Parsers.*
 
 import zio.test.*
 import zio.test.Assertion.*

@@ -6,7 +6,7 @@ import common.{AdventException, ParseFailure}
 import parser.*
 import StringParsers.Parser
 
-object ZioParser:
+object ZioParse:
   def parseToZio[A](parser: Parser[A])(word: String): IO[AdventException, A] =
     StringParsers.parse(parser)(word) match
       case Success(value) => IO.succeed(value)

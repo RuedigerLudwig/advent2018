@@ -14,15 +14,18 @@ trait StringParsers extends TrampolineParsers[Char, String]:
     else result
 
   def item: Parser[Char] =
-    input => Trampoline.pure(input.next
-      .map { (a, output) => (Success(a), output) }
-      //.map { (a, o) => println(s"a: $a; o: $o"); (a, o) }
-      .getOrElse (Failure(ParserError("End of Input reached")), input))
+    input => Trampoline.pure(
+      input.next
+        .map { (a, output) => (Success(a), output) }
+        .getOrElse (Failure(ParserError("End of Input reached")), input)
+    )
 
   def items(c: Int): Parser[String] =
-    input => Trampoline.pure(input.next(c)
-      .map { (a, output) => (Success(a), output) }
-      .getOrElse (Failure(ParserError("End of Input reached")), input))
+    input => Trampoline.pure(
+      input.next(c)
+        .map { (a, output) => (Success(a), output) }
+        .getOrElse (Failure(ParserError("End of Input reached")), input)
+    )
 
   def sat(pre: Char => Boolean): Parser[Char] = filter(item)(pre)
 
