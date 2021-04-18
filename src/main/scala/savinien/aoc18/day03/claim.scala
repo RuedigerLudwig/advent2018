@@ -1,6 +1,7 @@
 package savinien.aoc18
 package day03
 
+import parser.TokenParsers.*
 import common.area.Area
 import common.area.Parsers.*
 import common.ZioParse

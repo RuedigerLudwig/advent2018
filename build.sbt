@@ -55,6 +55,7 @@ lazy val commonSettings =
       , "-explain-types"
       , "-feature"
       , "-indent"
+      // , "-language:strictEquality"
       , "-new-syntax"
       , "-unchecked"
       , "-Xfatal-warnings"

@@ -2,7 +2,6 @@ package savinien.aoc18
 package day05
 
 import scala.language.adhocExtensions
-
 import org.scalatest.*
 import flatspec.AnyFlatSpec
 
@@ -29,7 +28,7 @@ class PolymerTest extends AnyFlatSpec:
     val parser   = PolyParsers.polymer
     val expected = Success(0)
     val result   = parse(parser)(input)
-    assert(result === expected)
+    assert(result == expected)
   }
 
   it.should("accept two merged pairs of matching letters") in {
@@ -37,7 +36,7 @@ class PolymerTest extends AnyFlatSpec:
     val parser   = PolyParsers.polymer
     val expected = Success(0)
     val result   = parse(parser)(input)
-    assert(result === expected)
+    assert(result == expected)
   }
 
   it.should("accept two pairs of matching letters") in {

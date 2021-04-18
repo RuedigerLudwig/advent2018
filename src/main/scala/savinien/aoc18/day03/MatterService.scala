@@ -4,7 +4,7 @@ package day03
 import scala.annotation.tailrec
 
 import common.*
-import common.pos.Pos
+import common.point.Point
 
 import zio.*
 
@@ -26,7 +26,7 @@ class MatterService(input: AdventInput.Service) extends SingleDay.Service:
 object MatterService:
   private[day03] def getMultiClaimCount(claims: List[Claim]): UIO[Int] =
     @tailrec
-    def unionLoop(claim: Claim, others: List[Claim], result: Set[Pos[Int]]): Set[Pos[Int]] = others match
+    def unionLoop(claim: Claim, others: List[Claim], result: Set[Point[Int]]): Set[Point[Int]] = others match
       case Nil          => result
       case head :: tail => 
         if claim.number == head.number then unionLoop(claim, tail, result)
@@ -38,7 +38,7 @@ object MatterService:
             else unionLoop(claim, tail, newResult)
 
     @tailrec
-    def loop(rest: List[Claim], result: Set[Pos[Int]]): Set[Pos[Int]] = rest match
+    def loop(rest: List[Claim], result: Set[Point[Int]]): Set[Point[Int]] = rest match
       case Nil => result
       case head :: tail => 
         val newResult = unionLoop(head, claims, Set.empty) 
