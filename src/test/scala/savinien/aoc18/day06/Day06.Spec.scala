@@ -113,7 +113,12 @@ object Day06Part2Spec extends DefaultRunnableSpec:
       val result = CoordinatesService.getSumDistanceAreaSize(input, 32)
       assertM(result) (equalTo(expected))
     }
-    , testM("day06 part2 works") {
-      assertM(ZIO.unit)(isUnit)
+    , testM("day06 part2") {
+      for
+        data <- FileReader.getContent("input/day06/example1.txt")
+        input = AdventInputMock.GetData(value(data)) && AdventInputMock.GetIntSetting(AdventAssertions.isSetting("MaxDist"), value(32))
+        result = SingleDay.part2.provideLayer(input >>> day06.live)
+        testResult <- assertM(result)(equalTo(AdventIntResult(16)))
+      yield testResult
     }
   )

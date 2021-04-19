@@ -19,9 +19,10 @@ class CoordinatesService(input: AdventInput.Service) extends SingleDay.Service:
 
   override def part2 = 
     for
-      data   <- input.getData
-      points <- CoordinatesService.parsePoints(data)
-      size   <- CoordinatesService.getSumDistanceAreaSize(points, 10_000)
+      data     <- input.getData
+      max_dist <- input.getIntSetting("MaxDist", 10_000)
+      points   <- CoordinatesService.parsePoints(data)
+      size     <- CoordinatesService.getSumDistanceAreaSize(points, max_dist)
     yield AdventIntResult(size)
 
 object CoordinatesService:
