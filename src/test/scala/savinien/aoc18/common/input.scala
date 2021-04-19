@@ -3,6 +3,7 @@ package common
 
 import zio.*
 import zio.test.mock.*
+import zio.test.mock.Expectation.*
 import zio.test.Assertion.*
 
 object AdventInputMock extends Mock[AdventInput]:
@@ -15,6 +16,9 @@ object AdventInputMock extends Mock[AdventInput]:
         def getData = proxy(GetData)
         def getIntSetting(setting: String, default: Int) = proxy(GetIntSetting, setting, default)
     }}
+
+  def provideIntSetting(setting: String, toReturn: Int) =
+    GetIntSetting(AdventAssertions.isSetting(setting), value(toReturn))
 
 object AdventAssertions:
   def isSetting(setting: String) =
