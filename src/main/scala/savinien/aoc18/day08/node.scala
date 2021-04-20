@@ -5,8 +5,6 @@ import common.*
 import parser.TokenParsers.*
 
 class Node(childNodes: List[Node], meta: List[Int]):
-  val metaSum: Int = childNodes.map { _.metaSum }.sum + meta.sum
-
   lazy val value: Int = 
     if childNodes.isEmpty then meta.sum
     else
@@ -16,12 +14,13 @@ class Node(childNodes: List[Node], meta: List[Int]):
 
 object Node:
   def num = unsignedInteger.token
-  def node: Parser[Node] = 
+  def node[T](f: (List[T], List[Int]) => T): Parser[T] =
     for
       numChild   <- num
       numMeta    <- num
-      childNodes <- node.repeat(numChild)
+      childNodes <- node(f).repeat(numChild)
       meta       <- num.repeat(numMeta)
-    yield Node(childNodes, meta)
+    yield f(childNodes, meta)
 
-  def pattern = node <* space
+  def metaPattern = node[Int] { _.sum + _.sum } <* space
+  def nodePattern = node      { Node(_, _)    } <* space

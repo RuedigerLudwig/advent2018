@@ -9,17 +9,12 @@ import parser.TokenParsers.*
 class ManeuverService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = 
     for
-      data   <- input.getData
-      node <- ManeuverService.parseNodes(data)
-    yield AdventIntResult(node.metaSum)
+      data <- input.getData
+      meta <- ZioParse.parseAllToZio(Node.metaPattern)(data)
+    yield AdventIntResult(meta)
 
   override def part2 = 
     for
       data <- input.getData
-      node <- ManeuverService.parseNodes(data)
+      node <- ZioParse.parseAllToZio(Node.nodePattern)(data)
     yield AdventIntResult(node.value)
-
-object ManeuverService:
-  private[day08] def parseNodes(input: String) =
-    ZioParse.parseAllToZio(Node.pattern)(input)
-end ManeuverService
