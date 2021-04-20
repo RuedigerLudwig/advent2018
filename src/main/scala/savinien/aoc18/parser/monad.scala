@@ -8,6 +8,9 @@ trait Monad[F[+_]]:
   extension [A](m: F[A])
     def flatMap[B](f: A => F[B]): F[B]
 
+    @targetName("opMany")
+    def `>>=`[B](f: A => F[B]): F[B] = flatMap(f)
+
   def pure[A](a: A): F[A]
 
   // Concrete

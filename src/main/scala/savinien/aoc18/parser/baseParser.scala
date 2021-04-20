@@ -64,8 +64,6 @@ trait BaseParsers[P[+_]] extends Monad[P]:
 
     def skipRight(p2: => P[Any]): P[A] = zipWith(p2) { (a, _) => a }
 
-
-
     def many: P[List[A]] = zipWith(p1.many) { _ :: _} | pure(Nil)
 
     def many1: P[NonEmptyList[A]] = zipWith(p1.many) { NonEmptyList(_, _) }
