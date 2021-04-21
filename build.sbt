@@ -3,7 +3,7 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala     = "3.0.0-RC2"
+  val scala     = "3.0.0-RC2" // RC3 is out - so far no further support
   val zio       = "1.0.6"
   val scalatest = "3.2.7"
 }
