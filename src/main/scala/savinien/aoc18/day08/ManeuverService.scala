@@ -7,17 +7,14 @@ import zio.*
 import parser.TokenParsers.*
 
 class ManeuverService(input: AdventInput.Service) extends SingleDay.Service:
-  override def part1 = 
-    for
-      data <- input.getData
-      meta <- ZioParse.parseAllToZio(ManeuverService.metaPattern)(data)
-    yield AdventIntResult(meta)
+  override def part1 = calculate(ManeuverService.metaSumPattern)
+  override def part2 = calculate(ManeuverService.selectPattern)
 
-  override def part2 = 
+  def calculate(p: Parser[Int]): AdventTask[AdventResult] =
     for
-      data <- input.getData
-      value <- ZioParse.parseAllToZio(ManeuverService.valuePattern)(data)
-    yield AdventIntResult(value)
+      data   <- input.getData
+      result <- ZioParse.parseAllToZio(p)(data)
+    yield AdventIntResult(result)
 
 object ManeuverService:
   def num    = unsignedInteger.token
@@ -30,10 +27,10 @@ object ManeuverService:
       meta       <- num.repeat(numMeta)
     yield f(childNodes, meta)
 
-  def metaPattern = node { _.sum + _.sum } <* space
+  def metaSumPattern: Parser[Int] = node { _.sum + _.sum } <* space
 
-  def calcValue(childNodes: List[Int], meta: List[Int]): Int = 
+  def calcSelectValue(childNodes: List[Int], meta: List[Int]): Int = 
     if childNodes.isEmpty then meta.sum
     else meta.map(_ - 1).collect(childNodes).sum
 
-  def valuePattern = node { calcValue } <* space
+  def selectPattern: Parser[Int] = node { calcSelectValue } <* space
