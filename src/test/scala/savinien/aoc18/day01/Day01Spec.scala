@@ -15,7 +15,7 @@ object Day01Part1Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part1.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(3)))
+      assertM(result)(equalTo(AdventNumResult(3)))
     }
     , testM("day01 summes correctly 2") {
       val input = AdventInputMock.GetData(
@@ -23,7 +23,7 @@ object Day01Part1Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part1.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(0)))
+      assertM(result)(equalTo(AdventNumResult(0)))
     }
     , testM("day01 summes correctly 3") {
       val input = AdventInputMock.GetData(
@@ -31,7 +31,7 @@ object Day01Part1Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part1.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(-6)))
+      assertM(result)(equalTo(AdventNumResult(-6)))
     }
     , testM("day01 can handle wrong input") {
       val input = AdventInputMock.GetData(
@@ -51,7 +51,7 @@ object Day01Part2Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part2.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(0)))
+      assertM(result)(equalTo(AdventNumResult(0)))
     }
     , testM("day01 finds correct repeat 2") {
       val input = AdventInputMock.GetData(
@@ -59,7 +59,7 @@ object Day01Part2Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part2.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(10)))
+      assertM(result)(equalTo(AdventNumResult(10)))
     }
     , testM("day01 finds correct repeat 3") {
       val input = AdventInputMock.GetData(
@@ -67,7 +67,7 @@ object Day01Part2Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part2.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(5)))
+      assertM(result)(equalTo(AdventNumResult(5)))
     }
     , testM("day01 finds correct repeat 4") {
       val input = AdventInputMock.GetData(
@@ -75,6 +75,6 @@ object Day01Part2Spec extends DefaultRunnableSpec:
       )
 
       val result = SingleDay.part2.provideLayer(input >>> day01.live)
-      assertM(result)(equalTo(AdventIntResult(14)))
+      assertM(result)(equalTo(AdventNumResult(14)))
     }
   )

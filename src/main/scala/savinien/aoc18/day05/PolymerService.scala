@@ -11,13 +11,13 @@ class PolymerService(input: AdventInput.Service) extends SingleDay.Service:
     for
       data   <- input.getData
       result <- PolymerService.scanAll(data)
-    yield AdventIntResult(result)
+    yield AdventNumResult(result)
 
   override def part2 = 
     for
       data   <- input.getData
       result <- PolymerService.scanRemoved(data)
-    yield AdventIntResult(result)
+    yield AdventNumResult(result)
 
 object PolyParsers:
   private def checkPolymer(use: Char => Boolean): Parser[Int] =

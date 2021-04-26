@@ -26,7 +26,7 @@ class PartsService(input: AdventInput.Service) extends SingleDay.Service:
       parts    <- PartsService.parseParts(data)
       orderMap <- PartsService.makeOrderMap(parts)
       result   <- PartsService.getSharedOrder(orderMap, workers, delay)
-    yield AdventIntResult(result)
+    yield AdventNumResult(result)
 
 object PartsService:
   var pattern = upper.between(string("Step "), string(" must be finished before step ")) ~: (upper <* string(" can begin."))

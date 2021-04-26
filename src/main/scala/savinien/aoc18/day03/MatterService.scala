@@ -14,14 +14,14 @@ class MatterService(input: AdventInput.Service) extends SingleDay.Service:
       data      <- input.getData
       claims    <- Claim.fromStringList(data)
       crossover <- MatterService.getMultiClaimCount(claims)
-    yield AdventIntResult(crossover)
+    yield AdventNumResult(crossover)
 
   override def part2 = 
     for
       data      <- input.getData
       claims    <- Claim.fromStringList(data)
       solitaire <- MatterService.findSolitaireClaim(claims)
-    yield AdventIntResult(solitaire.number)
+    yield AdventNumResult(solitaire.number)
 
 object MatterService:
   private[day03] def getMultiClaimCount(claims: List[Claim]): UIO[Int] =

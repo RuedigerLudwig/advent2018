@@ -27,7 +27,7 @@ object Day03Part1Spec extends DefaultRunnableSpec:
         value(List("#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2").mkString("\n"))
       )
       val result = SingleDay.part1.provideLayer(input >>> day03.live)
-      assertM(result)(equalTo(AdventIntResult(4)))
+      assertM(result)(equalTo(AdventNumResult(4)))
     }
   )
 
@@ -43,6 +43,6 @@ object Day03Part2Spec extends DefaultRunnableSpec:
         value(List("#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2").mkString("\n"))
       )
       val result = SingleDay.part2.provideLayer(input >>> day03.live)
-      assertM(result)(equalTo(AdventIntResult(3)))
+      assertM(result)(equalTo(AdventNumResult(3)))
     }
   )

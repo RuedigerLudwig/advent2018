@@ -14,7 +14,7 @@ class ManeuverService(input: AdventInput.Service) extends SingleDay.Service:
     for
       data   <- input.getData
       result <- ZioParse.parseAllToZio(p)(data)
-    yield AdventIntResult(result)
+    yield AdventNumResult(result)
 
 object ManeuverService:
   def num    = unsignedInteger.token

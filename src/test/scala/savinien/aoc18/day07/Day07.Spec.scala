@@ -29,7 +29,7 @@ object Day07Part2Spec extends DefaultRunnableSpec:
           AdventInputMock.provideIntSetting("Workers", 2) &&
           AdventInputMock.provideIntSetting("Delay", 0)
         result = SingleDay.part2.provideLayer(input >>> day07.live)
-        testResult <- assertM(result)(equalTo(AdventIntResult(15)))
+        testResult <- assertM(result)(equalTo(AdventNumResult(15)))
       yield testResult
     }
   )

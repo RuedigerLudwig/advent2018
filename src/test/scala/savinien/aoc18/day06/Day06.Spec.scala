@@ -100,7 +100,7 @@ object Day06Part1Spec extends DefaultRunnableSpec:
         data <- FileReader.getContent("input/day06/example1.txt")
         input = AdventInputMock.GetData(value(data))
         result = SingleDay.part1.provideLayer(input >>> day06.live)
-        testResult <- assertM(result)(equalTo(AdventIntResult(17)))
+        testResult <- assertM(result)(equalTo(AdventNumResult(17)))
       yield testResult
     }
   )
@@ -118,7 +118,7 @@ object Day06Part2Spec extends DefaultRunnableSpec:
         data <- FileReader.getContent("input/day06/example1.txt")
         input = AdventInputMock.GetData(value(data)) && AdventInputMock.provideIntSetting("MaxDist", 32)
         result = SingleDay.part2.provideLayer(input >>> day06.live)
-        testResult <- assertM(result)(equalTo(AdventIntResult(16)))
+        testResult <- assertM(result)(equalTo(AdventNumResult(16)))
       yield testResult
     }
   )

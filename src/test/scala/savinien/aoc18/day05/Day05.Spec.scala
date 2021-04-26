@@ -110,7 +110,7 @@ object Day05Part1Spec extends DefaultRunnableSpec:
         value("dabAcCaCBAcCcaDA")
       )
       val result = SingleDay.part1.provideLayer(input >>> day05.live)
-      assertM(result)(equalTo(AdventIntResult(10)))
+      assertM(result)(equalTo(AdventNumResult(10)))
     }
   )
 
@@ -121,6 +121,6 @@ object Day05Part2Spec extends DefaultRunnableSpec:
         value("dabAcCaCBAcCcaDA")
       )
       val result = SingleDay.part2.provideLayer(input >>> day05.live)
-      assertM(result)(equalTo(AdventIntResult(4)))
+      assertM(result)(equalTo(AdventNumResult(4)))
     }
   )

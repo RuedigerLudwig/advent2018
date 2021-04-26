@@ -9,13 +9,13 @@ class ChronalService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 =
     for 
       numbers <- ChronalService.getNumbers(input)
-    yield AdventIntResult(numbers.sum)
+    yield AdventNumResult(numbers.sum)
 
   override def part2 =
     for 
       numbers <- ChronalService.getNumbers(input)
       repeat  <- ChronalService.getRepeat(numbers)
-    yield AdventIntResult(repeat)
+    yield AdventNumResult(repeat)
 
 private object ChronalService:
   def getNumbers(input: AdventInput.Service) =

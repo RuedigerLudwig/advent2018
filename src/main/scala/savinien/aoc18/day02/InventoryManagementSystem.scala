@@ -11,7 +11,7 @@ class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
       data      <- input.getData
       lines     <- InventoryService.toStringList(data)
       two_three <- InventoryService.count_two_three(lines)
-    yield AdventIntResult(two_three._1 * two_three._2)
+    yield AdventNumResult(two_three._1 * two_three._2)
 
   override def part2 = 
     for

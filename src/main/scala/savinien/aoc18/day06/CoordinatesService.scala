@@ -15,7 +15,7 @@ class CoordinatesService(input: AdventInput.Service) extends SingleDay.Service:
       data   <- input.getData
       points <- CoordinatesService.parsePoints(data)
       size   <- CoordinatesService.largestFiniteArea(points)
-    yield AdventIntResult(size)
+    yield AdventNumResult(size)
 
   override def part2 = 
     for
@@ -23,7 +23,7 @@ class CoordinatesService(input: AdventInput.Service) extends SingleDay.Service:
       max_dist <- input.getIntSetting("MaxDist", 10_000)
       points   <- CoordinatesService.parsePoints(data)
       size     <- CoordinatesService.getSumDistanceAreaSize(points, max_dist)
-    yield AdventIntResult(size)
+    yield AdventNumResult(size)
 
 object CoordinatesService:
   private[day06] def parsePoints(input: String) =

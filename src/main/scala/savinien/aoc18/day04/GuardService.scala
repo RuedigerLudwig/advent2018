@@ -17,7 +17,7 @@ class GuardService(input: AdventInput.Service) extends SingleDay.Service:
       (guard, sleepMap) = opt
       sleep     <- GuardService.sleepingMinute(sleepMap)
       (minute, _) = sleep
-    yield AdventIntResult(guard.toInt * minute.toInt)
+    yield AdventNumResult(guard.toInt * minute.toInt)
 
   override def part2 =
     for
@@ -27,7 +27,7 @@ class GuardService(input: AdventInput.Service) extends SingleDay.Service:
       guards    <- GuardService.compressGuards(collected)
       opt       <- GuardService.optimalMinute(guards)
       (guard, minute) = opt
-    yield AdventIntResult(guard.toInt * minute.toInt)
+    yield AdventNumResult(guard.toInt * minute.toInt)
 
 
 object GuardService:
