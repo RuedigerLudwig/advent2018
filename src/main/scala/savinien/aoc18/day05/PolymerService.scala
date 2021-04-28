@@ -3,8 +3,8 @@ package day05
 
 import common.*
 import zio.*
-import parser.StringParsers.*
-import parser.*
+import parsers.StringParsers.*
+import parsers.*
 
 class PolymerService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 =

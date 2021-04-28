@@ -1,5 +1,5 @@
 package savinien.aoc18
-package parser
+package parsers
 
 
 object StringParsers extends StringParsers

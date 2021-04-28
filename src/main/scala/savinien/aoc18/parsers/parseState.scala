@@ -1,5 +1,5 @@
 package savinien.aoc18
-package parser
+package parsers
 
 trait ParserState[ST, LT]:
   def hasNext: Boolean

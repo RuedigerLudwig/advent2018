@@ -2,7 +2,7 @@ package savinien.aoc18
 package day01
 
 import common.*
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 import zio.*
 
 class ChronalService(input: AdventInput.Service) extends SingleDay.Service:

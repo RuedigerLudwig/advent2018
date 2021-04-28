@@ -3,7 +3,7 @@ package common
 
 import zio.*
 import common.{AdventException, ParseFailure}
-import parser.*
+import parsers.*
 import StringParsers.Parser
 
 object ZioParse:

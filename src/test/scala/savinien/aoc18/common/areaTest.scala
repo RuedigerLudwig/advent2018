@@ -3,8 +3,8 @@ package common
 
 import scala.language.adhocExtensions
 
-import parser.Success
-import parser.TokenParsers.*
+import parsers.Success
+import parsers.TokenParsers.*
 import point.Point
 import area.Area
 import area.Parsers.*
@@ -16,7 +16,7 @@ class AreaTest extends AnyFlatSpec:
 
   "an area string".should("be parsed correctly") in {
     val input    = "3,2: 5x4"
-    val parser   = areaSizeParser
+    val parser   = areaSizeParser[Int]
     val expected = Success(Area(Point(3, 2), Point(7, 5)))
     val result   = parse(parser)(input)
     assert(result == expected)
@@ -140,5 +140,17 @@ class AreaTest extends AnyFlatSpec:
     val area = Area.bySize(Point(3, 4), Point(6, 8)).get
     val expected = Point(5, 7)
     val result = area.center
+    assert(result == expected)
+  }
+
+  "a row iterator".should("ietrator over all rows") in {
+    val area = Area(Point(3, 2), Point(7, 5))
+    val expected = List(
+      List(Point(3, 2), Point(4, 2), Point(5, 2), Point(6, 2), Point(7, 2)),
+      List(Point(3, 3), Point(4, 3), Point(5, 3), Point(6, 3), Point(7, 3)),
+      List(Point(3, 4), Point(4, 4), Point(5, 4), Point(6, 4), Point(7, 4)),
+      List(Point(3, 5), Point(4, 5), Point(5, 5), Point(6, 5), Point(7, 5))
+    )
+    val result = area.rows.map { _.toList }.toList
     assert(result == expected)
   }

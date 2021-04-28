@@ -1,5 +1,5 @@
 package savinien.aoc18
-package parser
+package parsers
 
 import scala.language.adhocExtensions
 

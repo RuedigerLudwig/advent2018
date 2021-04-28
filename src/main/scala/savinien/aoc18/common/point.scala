@@ -17,12 +17,17 @@ object point:
       val zero = summon[Integral[T]].zero
       Point(zero, zero)
 
+    export Parsers.parser
+
     extension [T: Integral](p: Point[T])
       @targetName("opAddPos")
       def `+`(p2: Product2[T, T]): Point[T] = Point(p.x + p2._1, p.y + p2._2)
 
       @targetName("opSubPos")
       def `-`(p2: Product2[T, T]): Point[T] = Point(p.x - p2._1, p.y - p2._2)
+
+      @targetName("opTimes")
+      def `*`(factor: T): Point[T] = Point(p.x * factor, p.y * factor)
 
       /**
        * The Manhatten distance of this Pos from the origin
@@ -32,7 +37,6 @@ object point:
       def min(p2: Point[T]): Point[T] = Point(p.x min p2.x, p.y min p2.y)
       def max(p2: Point[T]): Point[T] = Point(p.x max p2.x, p.y max p2.y)
 
-
   object Parsers:
-    import parser.TokenParsers.*
-    def point: Parser[Point[Int]] = integer.tupSep2(char(',').token) ^^ { case (x, y) => Point(x, y) }
+    import parsers.TokenParsers.*
+    def parser[T: Integral]: Parser[Point[T]] = integral[T].token.tupSep2(char(',')) ^^ Point.apply

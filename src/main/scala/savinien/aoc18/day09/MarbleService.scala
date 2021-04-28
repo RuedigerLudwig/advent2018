@@ -2,7 +2,7 @@ package savinien.aoc18
 package day09
 
 import common.*
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 import zio.*
 import collection.Iterator
 

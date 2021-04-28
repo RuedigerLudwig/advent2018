@@ -4,7 +4,7 @@ package day08
 import common.*
 import zio.*
 
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 
 class ManeuverService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = calculate(ManeuverService.metaSumPattern)

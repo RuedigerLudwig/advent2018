@@ -2,7 +2,7 @@ package savinien.aoc18
 package day04
 
 import common.*
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 import java.time.{LocalDateTime, DateTimeException}
 import zio.*
 import Types.GuardNum

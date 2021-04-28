@@ -6,7 +6,7 @@ import zio.*
 import common.*
 import common.point.*
 import common.area.*
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 import CoordinateHelpers.*
 
 class CoordinatesService(input: AdventInput.Service) extends SingleDay.Service:
@@ -26,8 +26,8 @@ class CoordinatesService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventNumResult(size)
 
 object CoordinatesService:
-  private[day06] def parsePoints(input: String) =
-    ZioParse.parseAllToZio(point.Parsers.point.lines)(input)
+  private[day06] def parsePoints(input: String): AdventTask[List[Point[Int]]] =
+    ZioParse.parseAllToZio(point.Point.parser[Int].lines)(input)
 
   private[day06] def largestFiniteArea(input: List[Point[Int]]): AdventTask[Int] =
     val values = getFiniteSizes(input).values

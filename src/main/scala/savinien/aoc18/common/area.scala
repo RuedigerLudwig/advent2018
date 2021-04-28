@@ -89,9 +89,30 @@ object area:
               runY = runY + one
             result
 
+      def rows: Iterator[Iterator[Point[T]]] = new AbstractIterator[Iterator[Point[T]]]:
+        inline def one: T  = summon[Integral[T]].one
+        private var runY = area.bottomLeft.y
+        
+        override def hasNext = runY <= area.topRight.y
+
+        override def next: Iterator[Point[T]] =
+          val row = new ColIterator(runY)
+          runY = runY + one 
+          row
+
+        private class ColIterator(row: T) extends AbstractIterator[Point[T]]:
+          private var runX = area.bottomLeft.x
+          override def hasNext = runX <= area.topRight.x
+
+          override def next: Point[T] =
+            val point = Point(runX, row)
+            runX = runX + one
+            point
+
+
   object Parsers:
-    import parser.TokenParsers.*
+    import parsers.TokenParsers.*
 
-    private def sizeParser: Parser[Point[Int]] = integer.tupSep2(char('x').token).token ^^ { Point(_, _) }
+    private def sizeParser[T: Integral]: Parser[Point[T]] = integral[T].token.tupSep2(char('x')) ^^ Point.apply
 
-    def areaSizeParser: Parser[Area[Int]] = (point.Parsers.point <* char(':').token) ~: sizeParser ^? checkedOption { case (pos, size) => Area.bySize(pos, size) }
+    def areaSizeParser[T: Integral]: Parser[Area[T]] = (point.Point.parser[T] <* char(':')) ~: sizeParser ^? checkedOption(Area.bySize)

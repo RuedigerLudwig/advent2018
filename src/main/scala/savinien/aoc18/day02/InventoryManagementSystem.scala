@@ -3,7 +3,7 @@ package day02
 
 import zio.*
 import common.*
-import parser.TokenParsers.*
+import parsers.TokenParsers.*
 
 class InventoryService(input: AdventInput.Service) extends SingleDay.Service:
   override def part1 = 

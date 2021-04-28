@@ -13,6 +13,7 @@ object AllDays:
      day07.live,
      day08.live,
      day09.live,
+     day10.live,
   )
 
   val MAX_DAY = finished.length

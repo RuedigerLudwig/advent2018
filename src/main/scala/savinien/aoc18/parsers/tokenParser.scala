@@ -1,4 +1,4 @@
-package savinien.aoc18.parser
+package savinien.aoc18.parsers
 
 import scala.util.Try
 import java.time.{LocalDateTime, LocalDate, LocalTime}
@@ -20,15 +20,20 @@ trait TokenParsers extends StringParsers:
     override def apply(input: A): B        = check(input).get
     override def isDefinedAt(input: A)     = check(input).isDefined
 
-  private def checkedInt  = checkedTry[String, Int](_.toInt)
+  private def checkedIntegral[T: Integral] = checkedOption[String, T](summon[Integral[T]].parseString)
   private def checkedTime = checkedTry[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
   private def checkedDate = checkedTry[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)
 
-  def unsignedInteger: Parser[Int] = digits ^? checkedInt
-  def integer: Parser[Int] = oneOf("+-").? ~: digits ^^ { 
+  def unsignedIntegral[T: Integral]: Parser[T] = digits ^? checkedIntegral
+  def integral[T: Integral]: Parser[T] = oneOf("+-").? ~: digits ^^ { 
     case (Some('-'), num) => s"-$num"
     case (_,         num) => num
-  } ^? checkedInt
+  } ^? checkedIntegral
+
+  def integer: Parser[Int] = integral[Int]
+  def unsignedInteger: Parser[Int] = unsignedIntegral[Int]
+  def long: Parser[Long] = integral[Long]
+  def unsignedLong: Parser[Long] = unsignedIntegral[Long]
 
   def timeParser: Parser[LocalTime] = 
     unsignedInteger.tupSep2(char(':')).token ^? checkedTime
@@ -40,11 +45,15 @@ trait TokenParsers extends StringParsers:
     case (date, time) => LocalDateTime.of(date, time).nn
   }
 
+  def configValue[T](name: String, parser: Parser[T]): Parser[T] =
+    ((string(name) ~: char('=').token) *> parser).token
+
   extension [A](p: Parser[A])
     def token:     Parser[A] = p.between(hspace, hspace)
     def inSquares: Parser[A] = p.between(char('['), char(']'))
     def inParens:  Parser[A] = p.between(char('('), char(')'))
     def inCurly:   Parser[A] = p.between(char('{'), char('}'))
+    def inAngles:  Parser[A] = p.between(char('<'), char('>'))
 
     def lines: Parser[List[A]] = p.sepby(endOfLine) <* endOfLine.?
 end TokenParsers

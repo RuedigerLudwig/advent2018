@@ -11,8 +11,8 @@ import zio.test.mock.Expectation.*
 import zio.*
 
 import common.*
-import parser.StringParsers.*
-import parser.*
+import parsers.StringParsers.*
+import parsers.*
 
 class PolymerTest extends AnyFlatSpec:
   "a polymer test".should("accept a single letter") in {

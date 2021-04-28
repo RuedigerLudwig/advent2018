@@ -1,5 +1,5 @@
 package savinien.aoc18
-package parser
+package parsers
 
 sealed trait Result[+A]
 case class Success[A](a: A)                 extends Result[A]
