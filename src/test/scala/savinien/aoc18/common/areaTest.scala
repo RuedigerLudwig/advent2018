@@ -5,9 +5,8 @@ import scala.language.adhocExtensions
 
 import parsers.Success
 import parsers.TokenParsers.*
-import point.Point
-import area.Area
-import area.Parsers.*
+import geometric.*
+import Area.Parsers.*
 
 import org.scalatest.*
 import flatspec.AnyFlatSpec

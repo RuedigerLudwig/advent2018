@@ -1,11 +1,10 @@
 package savinien.aoc18
 package day10
 
-import common.point.Point
-import parsers.TokenParsers.*
 import common.*
-import common.area.Area
-import common.point.Point.*
+import parsers.TokenParsers.*
+import geometric.Area
+import geometric.Point
 import math.Ordering.Implicits.infixOrderingOps
 
 case class Star[T: Integral](val position: Point[T], val velocity: Point[T]):

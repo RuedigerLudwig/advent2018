@@ -4,8 +4,8 @@ package day03
 import scala.language.adhocExtensions
 
 import common.*
-import common.point.Point
-import common.area.Area
+import geometric.Point
+import geometric.Area
 
 import zio.test.*
 import zio.test.Assertion.*

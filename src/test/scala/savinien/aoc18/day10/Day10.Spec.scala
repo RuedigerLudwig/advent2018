@@ -2,7 +2,7 @@ package savinien.aoc18
 package day10
 
 import common.*
-import common.point.*
+import geometric.*
 
 import zio.test.*
 import zio.test.Assertion.*

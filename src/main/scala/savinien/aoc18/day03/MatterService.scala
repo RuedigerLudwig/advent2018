@@ -4,7 +4,7 @@ package day03
 import scala.annotation.tailrec
 
 import common.*
-import common.point.Point
+import geometric.Point
 
 import zio.*
 

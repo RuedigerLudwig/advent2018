@@ -2,8 +2,7 @@ package savinien.aoc18
 package day03
 
 import parsers.TokenParsers.*
-import common.area.Area
-import common.area.Parsers.*
+import common.geometric.Area
 import common.ZioParse
 
 case class Claim private(number: Int, area: Area[Int])
@@ -13,7 +12,7 @@ object Claim:
     new Claim(number, area)
 
   def parser =
-    (char('#') *> unsignedInteger) ~: (string(" @ ") *> areaSizeParser[Int]) ^^ {  case (number, area) => Claim(number, area) }
+    (char('#') *> unsignedInteger) ~: (string(" @ ") *> Area.Parsers.areaSizeParser[Int]) ^^ {  case (number, area) => Claim(number, area) }
   
   def fromStringList = ZioParse.parseAllToZio(lines(Claim.parser))
 

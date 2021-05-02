@@ -10,3 +10,9 @@ case class AdventNumResult[T: Integral](value: T) extends AdventResult:
 case class AdventStringResult(value: String) extends AdventResult:
   override def asString: String = value
   override def toString() = if value.contains("\n") then "\n" + value else value
+
+case class AdventGenResult[T](value: T) extends AdventResult:
+  override def asString: String = value.toString
+  override def toString() = 
+    val str = asString
+    if str.contains("\n") then "\n" + str else str

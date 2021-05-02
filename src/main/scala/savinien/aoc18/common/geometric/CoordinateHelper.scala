@@ -1,12 +1,10 @@
 package savinien.aoc18
-package day06
+package common
+package geometric
 
-import common.area.*
-import common.point.*
 import math.Integral.Implicits.infixIntegralOps
 
-object CoordinateHelpers:
-  
+object CoordinateHelper:
   extension (p: Point[Int])
     def vertPath(steps: Int): Iterable[Point[Int]] = 
       (0 until steps by steps.sign).map { s => Point(p.x, p.y + s) }

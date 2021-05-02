@@ -2,10 +2,8 @@ package savinien.aoc18
 package day06
 
 import common.*
-import common.point.Point
-import common.area.Area
-
-import CoordinateHelpers.*
+import geometric.*
+import CoordinateHelper.*
 
 import scala.language.adhocExtensions
 import org.scalatest.*
