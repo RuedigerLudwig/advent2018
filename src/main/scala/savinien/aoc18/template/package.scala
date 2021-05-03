@@ -5,4 +5,4 @@ import zio.*
 
 package object dayXX:
   def live: URLayer[AdventInput, SingleDay] =
-    ZLayer.fromService[ AdventInput.Service , SingleDay.Service ] { TemplateService(_) }
+    ZLayer.fromService[ AdventInput.Service , SingleDay.Service ] { TemplateService.apply }
