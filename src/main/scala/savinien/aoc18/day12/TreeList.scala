@@ -5,12 +5,11 @@ import parsers.TokenParsers.*
 import common.*
 
 case class Instruction(val input: Int, val doesGrow: Boolean):
-  self =>
-  private var onTrue = self
-  private var onFalse = self
+  private var onTrue = this
+  private var onFalse = this
 
-  def next(tree: Boolean) = if tree then onTrue else onFalse
-  def nextInput(tree: Boolean) = (input >> 1) + (if tree then 16 else 0)
+  def next(tree: Boolean): Instruction = if tree then onTrue else onFalse
+  private def nextInput(tree: Boolean) = (input >> 1) | (if tree then 0x10 else 0x00)
 
 object Instruction:
   private def ensureAll(treeMap: Map[Int, Instruction]): Map[Int, Instruction] =
@@ -19,55 +18,60 @@ object Instruction:
     }.toMap
 
   def apply(list: List[(Int, Boolean)]): Instruction =
-    val treeMap = ensureAll(list.map { (input, doesGrow) => input -> Instruction(input, doesGrow) }.toMap)
+    val treeMap = ensureAll(list.map { (input, doesGrow) => input -> new Instruction(input, doesGrow) }.toMap)
     treeMap.foreach { (_, instruction) =>
       instruction.onTrue = treeMap(instruction.nextInput(true))
       instruction.onFalse = treeMap(instruction.nextInput(false))
     }
-    treeMap(0)
+    val zero = treeMap(0)
+    assert(zero.doesGrow == false)
+    zero
 
-case class TreeLine(val trees: List[Boolean], val startAt: Long, instruction: Instruction):
+case class TreeLine private (val trees: List[Boolean], val startAt: Long, instruction: Instruction):
   lazy val value: Long =
     trees.zipWithIndex.collect { case (true, index) => index + startAt } .sum
 
-  override def toString = s"($startAt) - ${trees.map(tree => if tree then '#' else '.').mkString}"
+  override def toString = s"($startAt) - ${trees.map(if _ then '#' else '.').mkString}"
 
-  def spread: TreeLine = spreadTimes(1)
+  def spread(times: Long): TreeLine =
+    def doMore(prevInstruction: Instruction, nextLine: List[Boolean]): List[Boolean] =
+      val nextInstruction = prevInstruction.next(false)
+      if nextInstruction.input == 0 then nextLine
+      else doMore(nextInstruction, nextInstruction.doesGrow :: nextLine)
 
-  def spreadTimes(times: Long): TreeLine =
-    def doMore(times: Int, lastInstruction: Instruction, nextLine: List[Boolean]): List[Boolean] =
-      if times <= 0 then nextLine
-      else 
-        val nextInstruction = lastInstruction.next(false)
-        doMore(times - 1, nextInstruction, nextInstruction.doesGrow :: nextLine)
-
-    def oneSpread(line: List[Boolean], lastInstruction: Instruction, nextLine: List[Boolean]): List[Boolean] =
+    def oneIteration(line: List[Boolean], prevInstruction: Instruction, nextLine: List[Boolean]): List[Boolean] =
       line match
-        case Nil => doMore(5, lastInstruction, nextLine).dropWhile(!_)
+        case Nil => doMore(prevInstruction, nextLine).dropWhile(!_).reverse
         case tree :: tail =>
-          val nextInstruction = lastInstruction.next(tree)
-          oneSpread(tail, nextInstruction, nextInstruction.doesGrow :: nextLine)
+          val nextInstruction = prevInstruction.next(tree)
+          oneIteration(tail, nextInstruction, nextInstruction.doesGrow :: nextLine)
 
-    def manySpread(times: Long, treeLine: List[Boolean], startAt: Long): TreeLine =
-      if times <= 0 then TreeLine(treeLine, startAt, instruction)
+    def multiSpread(times: Long, treeLine: List[Boolean], startAt: Long): TreeLine =
+      if times <= 0 then new TreeLine(treeLine, startAt, instruction)
       else
-        val nextLine = oneSpread(treeLine, instruction, Nil).reverse
+        val nextLine = oneIteration(treeLine, instruction, Nil)
         val startOffset = nextLine.indexOf(true)
-        val cutNextLine = nextLine.drop(startOffset)
+        val newTreeLine = nextLine.drop(startOffset)
         val newStartAt = startAt + startOffset - 2
-        if cutNextLine == treeLine then TreeLine(cutNextLine, newStartAt + (newStartAt - startAt) * times - 1, instruction)
-        else manySpread(times - 1, cutNextLine, newStartAt)
+        if newTreeLine == treeLine then new TreeLine(newTreeLine, newStartAt + (newStartAt - startAt) * times - 1, instruction)
+        else multiSpread(times - 1, newTreeLine, newStartAt)
 
-    manySpread(times, trees, startAt)
+    multiSpread(times, trees, startAt)
 
 object TreeLine:
+  def apply(treeLine: List[Boolean], startAt: Int, instruction: Instruction): TreeLine =
+    val startOffset = treeLine.indexOf(true)
+    val newTreeLine = treeLine.drop(startOffset)
+    val newStartAt = startAt + startOffset
+    new TreeLine(newTreeLine, newStartAt, instruction)
+    
   private def toNumber(list: List[Boolean]): Int =
     def loop(list: List[Boolean], value: Int, result: Int): Int =
       list match
-        case Nil => result
-        case true :: tail => loop(tail, value * 2, value + result)
+        case Nil           => result
+        case true  :: tail => loop(tail, value * 2, result + value)
         case false :: tail => loop(tail, value * 2, result)
-    loop(list.take(5), 1, 0)
+    loop(list, 1, 0)
 
   val tree = char('#').as(true) | char('.').as(false)
   val initialTrees = tree.*

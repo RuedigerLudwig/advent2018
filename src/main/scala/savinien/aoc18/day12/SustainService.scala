@@ -9,16 +9,12 @@ case class SustainService(input: AdventInput.Service) extends SingleDay.Service:
     for
       data     <- input.getData
       treeLine <- TreeLine.fromString(data)
-      result   <- ZIO.succeed(treeLine.spreadTimes(20))
+      result   <- ZIO.succeed(treeLine.spread(20))
     yield AdventNumResult(result.value)
 
   override def part2 = 
     for
       data     <- input.getData
       treeLine <- TreeLine.fromString(data)
-      result   <- ZIO.succeed(treeLine.spreadTimes(50_000_000_000))
-      //result   <- ZIO.succeed(treeLine.spreadTimes(500))
+      result   <- ZIO.succeed(treeLine.spread(50_000_000_000))
     yield AdventNumResult(result.value)
-
-object SustainService:
-end SustainService
