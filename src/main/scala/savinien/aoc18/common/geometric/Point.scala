@@ -20,11 +20,15 @@ object Point:
   export Parsers.parser
 
   extension [T: Integral](p: Point[T])
+    def addPoint(p2: Product2[T, T]): Point[T] = Point(p.x + p2._1, p.y + p2._2)
+
     @targetName("opAddPos")
-    def `+`(p2: Product2[T, T]): Point[T] = Point(p.x + p2._1, p.y + p2._2)
+    inline def `+`(p2: Product2[T, T]): Point[T] = addPoint(p2)
+
+    def subPoint(p2: Product2[T, T]): Point[T] = Point(p.x - p2._1, p.y - p2._2)
 
     @targetName("opSubPos")
-    def `-`(p2: Product2[T, T]): Point[T] = Point(p.x - p2._1, p.y - p2._2)
+    inline def `-`(p2: Product2[T, T]): Point[T] = subPoint(p2)
 
     @targetName("opTimes")
     def `*`(factor: T): Point[T] = Point(p.x * factor, p.y * factor)
@@ -36,6 +40,16 @@ object Point:
 
     def min(p2: Point[T]): Point[T] = Point(p.x min p2.x, p.y min p2.y)
     def max(p2: Point[T]): Point[T] = Point(p.x max p2.x, p.y max p2.y)
+
+    @targetName("opAddPointDir")
+    def `+`(dir: Direction): Point[T] =
+      val one = summon[Integral[T]].one
+      val zero = summon[Integral[T]].zero
+      dir match
+        case Direction.East  => p + Point(one, zero)
+        case Direction.North => p - Point(zero, one)
+        case Direction.West  => p - Point(one, zero)
+        case Direction.South => p + Point(zero, one)
 
   object Parsers:
     import parsers.TokenParsers.*

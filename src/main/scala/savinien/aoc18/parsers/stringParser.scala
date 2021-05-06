@@ -1,7 +1,6 @@
 package savinien.aoc18
 package parsers
 
-
 object StringParsers extends StringParsers
 
 trait StringParsers extends TrampolineParsers[Char, String]:

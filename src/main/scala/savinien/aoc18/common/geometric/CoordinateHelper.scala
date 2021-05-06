@@ -32,12 +32,12 @@ object CoordinateHelper:
   extension (area: Area[Int])
     def perimeter: Iterable[Point[Int]] = 
       if area.height == 1 then
-        if area.width == 1 then List(area.bottomLeft)
-        else area.bottomLeft.horizPath(area.width)
+        if area.width == 1 then List(area.topLeft)
+        else area.topLeft.horizPath(area.width)
       else 
-        if area.width == 1 then area.bottomLeft.vertPath(area.height)
+        if area.width == 1 then area.topLeft.vertPath(area.height)
         else 
-          area.bottomLeft.horizPath(area.width - 1) ++
-          Point(area.topRight.x, area.bottomLeft.y).vertPath(area.height - 1) ++
-          area.topRight.horizPath(1 - area.width) ++
-          Point(area.bottomLeft.x, area.topRight.y).vertPath(1 - area.height)
+          area.topLeft.horizPath(area.width - 1) ++
+          Point(area.bottomRight.x, area.topLeft.y).vertPath(area.height - 1) ++
+          area.bottomRight.horizPath(1 - area.width) ++
+          Point(area.topLeft.x, area.bottomRight.y).vertPath(1 - area.height)

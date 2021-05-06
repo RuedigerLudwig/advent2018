@@ -3,8 +3,6 @@ package savinien.aoc18.parsers
 import scala.util.Try
 import java.time.{LocalDateTime, LocalDate, LocalTime}
 
-import StringParsers.given
-
 object TokenParsers extends TokenParsers
 
 trait TokenParsers extends StringParsers:
