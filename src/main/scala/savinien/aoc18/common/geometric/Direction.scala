@@ -5,10 +5,7 @@ import scala.annotation.targetName
 import Turn.*
 
 enum Direction:
-  case East
-  case North
-  case West
-  case South
+  case East, North, West, South
 
 object Direction:
   extension (dir: Direction)
@@ -20,7 +17,4 @@ object Direction:
         case (South, Forward) | (East, Right) | (North, Back) | (West, Left) => South
 
 enum Turn:
-  case Forward
-  case Left
-  case Right
-  case Back
+  case Forward, Left, Right, Back
