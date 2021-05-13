@@ -23,8 +23,8 @@ object ManeuverService:
     for
       numChild   <- num
       numMeta    <- posNum
-      childNodes <- node(f).repeat(numChild)
-      meta       <- num.repeat(numMeta)
+      childNodes <- node(f).repeatExact(numChild)
+      meta       <- num.repeatExact(numMeta)
     yield f(childNodes, meta)
 
   def metaSumPattern: Parser[Int] = node { _.sum + _.sum } <* space

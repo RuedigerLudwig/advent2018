@@ -86,32 +86,45 @@ trait BaseParsers[P[+_]] extends Monad[P]:
     def lazyMany1[B](p2: => P[B]): P[(NonEmptyList[A], B)] =
       p1 ~: p1.lazyMany(p2) ^^ { (a, as, b)  => (NonEmptyList(a, as), b ) }
 
-    def sepby(s: P[Any]): P[List[A]] =
-      p1.sepby1(s).map(_.toList) | pure(Nil)
+    def sepMany(s: P[Any]): P[List[A]] =
+      p1.sepMany1(s).map(_.toList) | pure(Nil)
 
-    def sepby1(s: P[Any]): P[NonEmptyList[A]] =
-      zipWith(s.skipLeft(p1).*) { NonEmptyList(_, _) }
+    def sepMany1(s: P[Any]): P[NonEmptyList[A]] =
+      zipWith((s *> p1).*) { NonEmptyList(_, _) }
+
+    def sepExact(s: P[Any])(n: Int): P[List[A]] =
+      if n <= 0 then pure(Nil)
+      else if n == 1 then p1.map(List(_))
+      else zipWith((s *> p1).repeatExact(n-1)) { _ :: _}
+
+    def sepMax(s: P[Any])(n: Int): P[List[A]] =
+      if n <= 0 then pure(Nil)
+      else if n == 1 then p1.map(List(_)) | pure(Nil)
+      else zipWith((s *> p1).repeatMax(n-1)) { _ :: _} | pure(Nil)
+
+    def sepBetween(s: P[Any])(min: Int)(max: Int): P[List[A]] =
+      sepExact(s)(min).zipWith((s *> p1).repeatMax(max - min)) { _ ::: _ }
 
     def tupSep2(s: P[Any]): P[(A, A)]    = (p1 <* s) ~: p1
     def tupSep3(s: P[Any]): P[(A, A, A)] = (p1 <* s) ~: tupSep2(s)
 
-    def between(open: => P[Any], close: => P[Any]): P[A] =
+    def inside(open: => P[Any], close: => P[Any]): P[A] =
       for
         _ <- open
         a <- p1
         _ <- close
       yield a
 
-    def repeat(n: Int): P[List[A]] =
+    def repeatExact(n: Int): P[List[A]] =
       if n <= 0 then pure(Nil)
-      else zipWith(repeat(n-1)) { _ :: _ }
+      else zipWith(repeatExact(n-1)) { _ :: _ }
 
     def repeatMax(n: Int): P[List[A]] =
       if n <= 0 then pure(Nil)
       else zipWith(p1.repeatMax(n - 1)) { _ :: _ } | pure(Nil)
 
     def repeatBetween(min: Int)(max: Int): P[List[A]] =
-      repeat(min).zipWith(repeatMax(max - min)) { _ ::: _ }
+      repeatExact(min).zipWith(repeatMax(max - min)) { _ ::: _ }
 
     @targetName("opMany")
     def `*`: P[List[A]] = p1.many

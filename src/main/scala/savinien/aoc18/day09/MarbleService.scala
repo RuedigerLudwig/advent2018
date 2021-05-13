@@ -21,7 +21,7 @@ class MarbleService(input: AdventInput.Service) extends SingleDay.Service:
 
 object MarbleService:
   def num = unsignedInteger.token
-  def pattern: Parser[(Int, Int)] = num ~: num.between(string("players; last marble is worth"), string ("points")) 
+  def pattern: Parser[(Int, Int)] = num ~: num.inside(string("players; last marble is worth"), string ("points")) 
 
   private[day09] def calcPoints(players: Int, marbles: Int)(using list: MarbleIterator): Map[Int, Long] =
     list.takeWhile((_, marble) => marble < marbles).foldLeft(Map.empty) {

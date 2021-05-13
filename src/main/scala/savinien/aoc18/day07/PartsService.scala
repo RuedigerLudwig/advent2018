@@ -29,7 +29,7 @@ class PartsService(input: AdventInput.Service) extends SingleDay.Service:
     yield AdventNumResult(result)
 
 object PartsService:
-  var pattern = upper.between(string("Step "), string(" must be finished before step ")) ~: (upper <* string(" can begin."))
+  var pattern = upper.inside(string("Step "), string(" must be finished before step ")) ~: (upper <* string(" can begin."))
 
   private[day07] def parseParts(input: String) =
     ZioParse.parseAllToZio(pattern.lines)(input)

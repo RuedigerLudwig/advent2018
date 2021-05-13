@@ -102,9 +102,9 @@ class ParserTest extends AnyFlatSpec:
     assert(!result.isSuccess)
   }
 
-  it.should("be found when separated") in {
+  "sep".should("find an arbitrarily long list") in {
     val input = "50,42,2"
-    val parser = sepby1(unsignedInteger)(char(','))
+    val parser = sepMany1(unsignedInteger)(char(','))
     val expected = Success(List(50, 42, 2))
     val result = parse(parser)(input)
     assert(result == expected)
@@ -112,16 +112,111 @@ class ParserTest extends AnyFlatSpec:
 
   it.should("be found when bracketed") in {
     val input = "[50,42,2]"
-    val parser = unsignedInteger.sepby1(char(',')).between(char('['), char(']'))
+    val parser = unsignedInteger.sepMany(char(',')).inside(char('['), char(']'))
     val expected = Success(List(50, 42, 2))
     val result = parse(parser)(input)
     assert(result == expected)
   }
 
+  it.should("be found even when empty") in {
+    val input = "[]"
+    val parser = unsignedInteger.sepMany(char(',')).inside(char('['), char(']'))
+    val expected = Success(List())
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("be found even when single") in {
+    val input = "[42]"
+    val parser = unsignedInteger.sepMany1(char(',')).inside(char('['), char(']'))
+    val expected = Success(List(42))
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  "sepN".should("be found if actually more exist") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (string("a") ~: char('b')).mkString
+    val parser = raw.sepExact(char(','))(3).mkString
+    val expected = Success("ababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("be found in exact number") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepExact(char(','))(4).mkString
+    val expected = Success("abababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("fail for too few items") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepExact(char(','))(5).mkString
+    val result = parse(parser)(input)
+    assert(!result.isSuccess)
+  }
+
+  "sepMax".should("be found if actually more exist") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepMax(char(','))(3).mkString
+    val expected = Success("ababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("be found in exact number") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepMax(char(','))(4).mkString
+    val expected = Success("abababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("cope with more items") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepMax(char(','))(5).mkString
+    val expected = Success("abababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  "sepBetween".should("find any number in between") in {
+    val input = "ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepBetween(char(','))(3)(5).mkString
+    val expected = Success("abababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("accept too many patterns") in {
+    val input = "ab,ab,ab,ab,ab,ab,ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepBetween(char(','))(3)(5).mkString
+    val expected = Success("ababababab")
+    val result = parse(parser)(input)
+    assert(result == expected)
+  }
+
+  it.should("fail on too few tests") in {
+    val input = "ab,ab,c"
+    val raw = (char('a') ~: char('b')).mkString
+    val parser = raw.sepBetween(char(','))(3)(5).mkString
+    val result = parse(parser)(input)
+    assert(!result.isSuccess)
+  }
+  
   "repeat exact".should("be found if actually more exist") in {
     val input = "ababababc"
     val raw = (string("a") ~: char('b')).mkString
-    val parser = repeat(raw)(3).mkString
+    val parser = repeatExact(raw)(3).mkString
     val expected = Success("ababab")
     val result = parse(parser)(input)
     assert(result == expected)
@@ -130,7 +225,7 @@ class ParserTest extends AnyFlatSpec:
   it.should("be found in exact number") in {
     val input = "ababababc"
     val raw = (char('a') ~: char('b')).mkString
-    val parser = repeat(raw)(4).mkString
+    val parser = repeatExact(raw)(4).mkString
     val expected = Success("abababab")
     val result = parse(parser)(input)
     assert(result == expected)
@@ -139,7 +234,7 @@ class ParserTest extends AnyFlatSpec:
   it.should("fail for too few items") in {
     val input = "ababababc"
     val raw = (char('a') ~: char('b')).mkString
-    val parser = repeat(raw)(5).mkString
+    val parser = repeatExact(raw)(5).mkString
     val result = parse(parser)(input)
     assert(!result.isSuccess)
   }

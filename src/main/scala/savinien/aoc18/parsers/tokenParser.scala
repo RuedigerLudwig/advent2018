@@ -47,11 +47,11 @@ trait TokenParsers extends StringParsers:
     ((string(name) ~: char('=').token) *> parser).token
 
   extension [A](p: Parser[A])
-    def token:     Parser[A] = p.between(hspace, hspace)
-    def inSquares: Parser[A] = p.between(char('['), char(']'))
-    def inParens:  Parser[A] = p.between(char('('), char(')'))
-    def inCurly:   Parser[A] = p.between(char('{'), char('}'))
-    def inAngles:  Parser[A] = p.between(char('<'), char('>'))
+    def token:     Parser[A] = p.inside(hspace, hspace)
+    def inSquares: Parser[A] = p.inside(char('['), char(']'))
+    def inParens:  Parser[A] = p.inside(char('('), char(')'))
+    def inCurly:   Parser[A] = p.inside(char('{'), char('}'))
+    def inAngles:  Parser[A] = p.inside(char('<'), char('>'))
 
-    def lines: Parser[List[A]] = p.sepby(endOfLine) <* endOfLine.?
+    def lines: Parser[List[A]] = p.sepMany(endOfLine) <* endOfLine.?
 end TokenParsers

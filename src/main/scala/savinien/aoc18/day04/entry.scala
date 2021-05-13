@@ -19,7 +19,7 @@ object GuardEntry:
 
   def wakeUpParser:      Parser[GuardEntry] = guardTimeParser <* string("wakes up") ^^ { case time => WakesUp(time) }
   def fallsAsleepParser: Parser[GuardEntry] = guardTimeParser <* string("falls asleep") ^^ { case time => FallsAsleep(time) }
-  def shiftStartsParser: Parser[GuardEntry] = guardTimeParser ~: unsignedInteger.between(string("Guard #"), string(" begins shift")) ^^ { 
+  def shiftStartsParser: Parser[GuardEntry] = guardTimeParser ~: unsignedInteger.inside(string("Guard #"), string(" begins shift")) ^^ { 
     case (time, guard) => ShiftStarts(time, GuardNum(guard)) 
   }
 

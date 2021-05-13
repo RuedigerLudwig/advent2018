@@ -53,7 +53,7 @@ object TreeLine:
   val initialTrees = tree.*
   val init = string("initial state: ") *> initialTrees
 
-  val input = tree.repeat(5) ^^ toNumber
+  val input = tree.repeatExact(5) ^^ toNumber
   val treeRule = (input <* string("=>").token) ~: tree
   val treeRules = treeRule.lines ^^ { list => Rules(list.toMap) }
 
