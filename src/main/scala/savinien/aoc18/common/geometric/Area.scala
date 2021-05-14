@@ -50,6 +50,9 @@ object Area:
     def grow(by: T): Area[T] =
       Area(area.topLeft - Point(by, by), area.bottomRight + Point(by, by))
 
+    def grow(byX: T, byY: T): Area[T] =
+      Area(area.topLeft - Point(byX, byY), area.bottomRight + Point(byX, byY))
+
     def union(snd: Area[T]): Option[Area[T]] = 
       val newTop = area.bottomRight.y.min(snd.bottomRight.y)
       val newBtm = area.topLeft.y.max(snd.topLeft.y)

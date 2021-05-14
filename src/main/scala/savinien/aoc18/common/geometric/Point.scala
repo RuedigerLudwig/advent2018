@@ -20,6 +20,9 @@ object Point:
   export Parsers.parser
 
   extension [T: Integral](p: Point[T])
+    def setX(x: T): Point[T] = Point(x, p.y)
+    def setY(y: T): Point[T] = Point(p.x, y)
+
     def addPoint(p2: Product2[T, T]): Point[T] = Point(p.x + p2._1, p.y + p2._2)
 
     @targetName("opAddPos")
