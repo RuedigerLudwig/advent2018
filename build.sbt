@@ -3,9 +3,9 @@
 // *****************************************************************************
 
 lazy val Version = new {
-  val scala     = "3.0.0-RC3"
-  val zio       = "1.0.7"
-  val scalatest = "3.2.8"
+  val scala     = "3.0.0-RC3" // 3.0.0 waiting for metals
+  val zio       = "1.0.7"     // 1.0.8 s.a.
+  val scalatest = "3.2.8"     // 3.2.9 s.a.
 }
 
 lazy val root =
