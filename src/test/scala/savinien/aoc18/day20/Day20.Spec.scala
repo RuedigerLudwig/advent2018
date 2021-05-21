@@ -21,35 +21,35 @@ class PathTest extends AnyFlatSpec:
     val input = "^WNE$"
     val expected = "WNE"
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   it.should("should also work for alternatives") in {
     val input = "^(E|W)$"
     val expected = "(E|W)"
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   it.should("should also work for alternatives with empty option") in {
     val input = "^(E|W|)$"
     val expected = "(E|W|!)"
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   it.should("should also work for connected items") in {
     val input = "^N(E|W)S$"
     val expected = "[N+(E|W)+S]"
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   it.should("should also work for deeper levels") in {
     val input = "^N(E|W(N|S))S$"
     val expected = "[N+(E|[W+(N|S)])+S]"
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   it.should("parse a complex map").in {
@@ -57,14 +57,14 @@ class PathTest extends AnyFlatSpec:
     val expected = "[ENWWW+(NEEE|[SSE+(EE|N)])]"
     val path = parse(Path.fullPath)(input)
     val result = parse(Path.fullPath)(input)
-    assert(result.get.show == expected)
+    assert(result.unsafeGet.show == expected)
   }
 
   "the furthest room".should("walk through the expected number of doors 1").in {
     val input = "^WNE$"
     val expected = 3
     val path = parse(Path.fullPath)(input)
-    val result = Walker.furthestRoom(path.get)
+    val result = Walker.furthestRoom(path.unsafeGet)
     assert(result == expected)
   }
 
@@ -72,7 +72,7 @@ class PathTest extends AnyFlatSpec:
     val input = "^ENWWW(NEEE|SSE(EE|N))$"
     val expected = 10
     val path = parse(Path.fullPath)(input)
-    val result = Walker.furthestRoom(path.get)
+    val result = Walker.furthestRoom(path.unsafeGet)
     assert(result == expected)
   }
 
@@ -80,7 +80,7 @@ class PathTest extends AnyFlatSpec:
     val input = "^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$"
     val expected = 18
     val path = parse(Path.fullPath)(input)
-    val result = Walker.furthestRoom(path.get)
+    val result = Walker.furthestRoom(path.unsafeGet)
     assert(result == expected)
   }
 
@@ -88,7 +88,7 @@ class PathTest extends AnyFlatSpec:
     val input = "^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$"
     val expected = 23
     val path = parse(Path.fullPath)(input)
-    val result = Walker.furthestRoom(path.get)
+    val result = Walker.furthestRoom(path.unsafeGet)
     assert(result == expected)
   }
 
@@ -96,7 +96,7 @@ class PathTest extends AnyFlatSpec:
     val input = "^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$"
     val expected = 31
     val path = parse(Path.fullPath)(input)
-    val result = Walker.furthestRoom(path.get)
+    val result = Walker.furthestRoom(path.unsafeGet)
     assert(result == expected)
   }
 
