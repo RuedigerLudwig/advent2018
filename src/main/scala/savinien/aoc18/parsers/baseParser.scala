@@ -26,6 +26,9 @@ trait BaseParsers[P[+_]] extends Monad[P]:
     def filter(predicate: A => Boolean): P[A] =
       p1.flatMap { a => if predicate(a) then pure(a) else fail(ParserError("Filter did not match")) }
 
+    def msgFilter(predicate: A => Boolean, message: A => String): P[A] =
+      p1.flatMap { a => if predicate(a) then pure(a) else fail(ParserError(message(a))) }
+
     def withFilter: (A => Boolean) => P[A] = filter
 
     def as[B](b: B): P[B] = p1.flatMap { _ => pure(b) }

@@ -26,18 +26,18 @@ trait StringParsers extends TrampolineParsers[Char, String]:
         .getOrElse (Failure(ParserError("End of Input reached")), input)
     )
 
-  def sat(pre: Char => Boolean): Parser[Char] = filter(item)(pre)
+  def sat(desc: String)(pre: Char => Boolean): Parser[Char] = msgFilter(item)(pre, c => s"$c did not match predicate $desc")
 
-  def char(c: Char):   Parser[Char] = sat { _ == c }
-  def digit:           Parser[Char] = sat { _.isDigit }
-  def lower:           Parser[Char] = sat { _.isLower }
-  def upper:           Parser[Char] = sat { _.isUpper }
-  def whitespace:      Parser[Char] = sat { _.isWhitespace }
-  def horizontalspace: Parser[Char] = sat { c => c.isWhitespace && !"\n\r".contains(c) }
+  def char(c: Char):   Parser[Char] = sat(s"=='$c'") { _ == c }
+  def digit:           Parser[Char] = sat("isDigit") { _.isDigit }
+  def lower:           Parser[Char] = sat("isLower") { _.isLower }
+  def upper:           Parser[Char] = sat("isUpper") { _.isUpper }
+  def whitespace:      Parser[Char] = sat("isWhtespace") { _.isWhitespace }
+  def horizontalspace: Parser[Char] = sat("isHSpace") { c => c.isWhitespace && !"\n\r".contains(c) }
   def letter:          Parser[Char] = lower | upper
   def alphanum:        Parser[Char] = letter | digit
 
-  def oneOf(s: String): Parser[Char] = sat {  s.contains(_) }
+  def oneOf(s: String): Parser[Char] = sat(s"oneOf\"($s)\"") {  s.contains(_) }
 
   def endOfLine: Parser[Unit] = (string("\r\n") | (char('\n') | char('\r'))).unit
 

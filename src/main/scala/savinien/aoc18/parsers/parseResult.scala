@@ -13,6 +13,10 @@ object Result extends Monad[Result]:
       result match
         case Success(a)                               => f(a)
         case nos @ (Failure(_) | Error(_) | Fatal(_)) => nos
+    def unsafeGet: A =
+      result match
+        case Success(a)                         => a
+        case (Failure(_) | Error(_) | Fatal(_)) => ???
 
   override def pure[A](a: A): Result[A] = Success(a)
 

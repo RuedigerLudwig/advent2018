@@ -30,6 +30,7 @@ object Nel:
     def ::(list: NonEmptyList[A]): NonEmptyList[AA] = elem :: list
 
   extension[A, AA >: A](list: NonEmptyList[A])
+    def appended(elem: AA): NonEmptyList[AA] = list.appended(elem)
     def prepended(elem: AA): NonEmptyList[AA] = elem :: list
 
     @targetName("concatNel")

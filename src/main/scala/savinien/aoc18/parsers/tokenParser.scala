@@ -47,6 +47,7 @@ trait TokenParsers extends StringParsers:
     ((string(name) ~: char('=').token) *> parser).token
 
   extension [A](p: Parser[A])
+    def trim:      Parser[A] = p.inside(space, space)
     def token:     Parser[A] = p.inside(hspace, hspace)
     def inSquares: Parser[A] = p.inside(char('['), char(']'))
     def inParens:  Parser[A] = p.inside(char('('), char(')'))
