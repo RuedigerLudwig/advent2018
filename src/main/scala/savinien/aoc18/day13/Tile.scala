@@ -32,4 +32,4 @@ object Tile:
       case 'X'  => Some(Tile.Crash)
       case _    => None
 
-  def parser: Parser[Tile] = item ^? checkedOption(fromChar)
+  def parser: Parser[Tile] = char ^? checkedOption(fromChar)

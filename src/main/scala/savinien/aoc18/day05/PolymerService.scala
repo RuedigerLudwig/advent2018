@@ -23,7 +23,7 @@ object PolyParsers:
   private def checkPolymer(use: Char => Boolean): Parser[Int] =
     def toggleCase(c: Char): Char = if c.isLower then c.toUpper else c.toLower
 
-    def nextValid: Parser[Char] = item.flatMap {
+    def nextValid: Parser[Char] = char.flatMap {
       case c if use(c) => pure(c)
       case _           => nextValid
     }

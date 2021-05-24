@@ -12,21 +12,21 @@ trait StringParsers extends TrampolineParsers[Char, String]:
     if state.hasNext then Failure(ParserError(s"Did not parse complete input: $state"))
     else result
 
-  def item: Parser[Char] =
+  def char: Parser[Char] =
     input => Trampoline.pure(
       input.next
         .map { (a, output) => (Success(a), output) }
         .getOrElse (Failure(ParserError("End of Input reached")), input)
     )
 
-  def items(c: Int): Parser[String] =
+  def string(length: Int): Parser[String] =
     input => Trampoline.pure(
-      input.next(c)
+      input.next(length)
         .map { (a, output) => (Success(a), output) }
         .getOrElse (Failure(ParserError("End of Input reached")), input)
     )
 
-  def sat(desc: String)(pre: Char => Boolean): Parser[Char] = msgFilter(item)(pre, c => s"$c did not match predicate $desc")
+  def sat(desc: String)(pre: Char => Boolean): Parser[Char] = msgFilter(char)(pre, c => s"$c did not match predicate $desc")
 
   def char(c: Char):   Parser[Char] = sat(s"=='$c'") { _ == c }
   def digit:           Parser[Char] = sat("isDigit") { _.isDigit }
@@ -42,7 +42,7 @@ trait StringParsers extends TrampolineParsers[Char, String]:
   def endOfLine: Parser[Unit] = (string("\r\n") | (char('\n') | char('\r'))).unit
 
   def string(str: String): Parser[String] = 
-    filter(items(str.length))(_ == str)
+    filter(string(str.length))(_ == str)
 
   def merge(p: => Parser[Char]): Parser[String] = many1(p).mkString
   def digits: Parser[String] = merge(digit)

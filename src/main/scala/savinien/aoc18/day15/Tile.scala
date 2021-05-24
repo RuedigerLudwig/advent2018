@@ -18,4 +18,4 @@ object Tile:
       case 'G' => Some(Tile.Gnome)
       case _   => None
 
-  def parser: Parser[Tile] = item ^? checkedOption(fromChar)
+  def parser: Parser[Tile] = char ^? checkedOption(fromChar)

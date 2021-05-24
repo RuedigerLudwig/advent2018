@@ -16,4 +16,4 @@ object Tile:
       case '#' => Some(Lumberyard)
       case _ => None
 
-  def parser = item ^? checkedOption(Tile.fromChar)
+  def parser = char ^? checkedOption(Tile.fromChar)
