@@ -19,11 +19,11 @@ object Advent extends App:
 
   private def runSingleDay(day: Int) = 
     (runSinglePart(SingleDay.part1, day, 1) *> runSinglePart(SingleDay.part2, day, 2))
-    .provideLayer( AdventInput.live(day) >>> AllDays.getDay(day) ++ Console.live)
+      .provideLayer(AdventInput.live(day) >>> AllDays.getDay(day) ++ Console.live)
 
   private def runSinglePart(effect: ZIO[SingleDay, AdventException, AdventResult], day: Int, part: Int) =
     (for
       result <- effect
       _      <- putStrLn(s"Result for day $day Part $part: $result")
     yield ())
-    .catchAll { e => putStrLn(s"Error on day $day Part $part: $e") } 
+      .catchAll { e => putStrLn(s"Error on day $day Part $part: $e") }
