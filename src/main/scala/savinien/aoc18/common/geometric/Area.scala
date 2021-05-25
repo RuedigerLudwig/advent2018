@@ -8,6 +8,7 @@ import scala.collection.AbstractIterator
 import scala.math.Integral
 import scala.math.Integral.Implicits.infixIntegralOps
 import scala.math.Ordering.Implicits.infixOrderingOps
+import common.ParticalHelper.checkedOption
 
 case class Area[T: Integral] private(val topLeft: Point[T], val bottomRight: Point[T]):
   override def toString: String = s"Area($topLeft, $bottomRight)"
