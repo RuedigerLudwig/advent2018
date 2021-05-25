@@ -3,6 +3,7 @@ package day18
 
 import parsers.TokenParsers.*
 import common.geometric.{Point, Area}
+import common.ParticalHelper.checkedOption
 
 import annotation.{targetName, tailrec}
 

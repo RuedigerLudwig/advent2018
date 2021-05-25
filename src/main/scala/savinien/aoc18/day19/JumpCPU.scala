@@ -3,6 +3,7 @@ package day19
 
 import parsers.TokenParsers.*
 import parsers.Nel.NonEmptyList
+import common.ParticalHelper.checkedOption
 
 case class Instruction(operation: Operation, inputA: Int, inputB: Int, output: Int):
   def apply(register: Register): Register =

@@ -4,6 +4,7 @@ package day17
 import parsers.TokenParsers.*
 import common.geometric.Point
 import common.geometric.CoordinateHelper.*
+import common.ParticalHelper.checkedOption
 
 case class Range(from: Int, to: Int):
   def steps = to - from + 1

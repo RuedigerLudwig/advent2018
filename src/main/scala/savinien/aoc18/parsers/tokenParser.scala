@@ -1,27 +1,12 @@
-package savinien.aoc18.parsers
+package savinien.aoc18
+package parsers
 
-import scala.util.Try
 import java.time.{LocalDateTime, LocalDate, LocalTime}
+import common.ParticalHelper.*
 
 object TokenParsers extends TokenParsers
 
 trait TokenParsers extends StringParsers:
-  def checkedTry[A, B](f: (A => B)): PartialFunction[A, B] = new PartialFunction:
-    private val cache                   = collection.mutable.Map.empty[A, Try[B]]
-    private def check(input: A): Try[B] = cache.getOrElseUpdate(input, Try(f(input)))
-    override def apply(input: A): B     = check(input).get
-    override def isDefinedAt(input: A)  = check(input).isSuccess
-
-  def checkedOption[A, B](f: (A => Option[B])): PartialFunction[A, B] = new PartialFunction:
-    private val cache                      = collection.mutable.Map.empty[A, Option[B]]
-    private def check(input: A): Option[B] = cache.getOrElseUpdate(input, f(input))
-    override def apply(input: A): B        = check(input).get
-    override def isDefinedAt(input: A)     = check(input).isDefined
-
-  private def checkedIntegral[T: Integral] = checkedOption[String, T](summon[Integral[T]].parseString)
-  private def checkedTime = checkedTry[(Int, Int), LocalTime]((h, m) => LocalTime.of(h, m).nn)
-  private def checkedDate = checkedTry[(Int, Int, Int), LocalDate]((y, m, d) => LocalDate.of(y, m, d).nn)
-
   def unsignedIntegral[T: Integral]: Parser[T] = digits ^? checkedIntegral
   def integral[T: Integral]: Parser[T] = oneOf("+-").? ~: digits ^^ { 
     case (Some('-'), num) => s"-$num"
@@ -45,6 +30,8 @@ trait TokenParsers extends StringParsers:
 
   def configValue[T](name: String, parser: Parser[T]): Parser[T] =
     ((string(name) ~: char('=').token) *> parser).token
+  def configValue2[T](name: String, parser: Parser[T]): Parser[T] =
+    ((string(name) ~: char(':').token) *> parser).token
 
   extension [A](p: Parser[A])
     def trim:      Parser[A] = p.inside(space, space)
@@ -54,5 +41,6 @@ trait TokenParsers extends StringParsers:
     def inCurly:   Parser[A] = p.inside(char('{'), char('}'))
     def inAngles:  Parser[A] = p.inside(char('<'), char('>'))
 
+    def line: Parser[A] = p <* endOfLine.?
     def lines: Parser[List[A]] = p.sepMany(endOfLine) <* endOfLine.?
 end TokenParsers

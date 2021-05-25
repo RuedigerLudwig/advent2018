@@ -3,6 +3,7 @@ package day20
 
 import common.geometric.{Direction, Point}
 import parsers.TokenParsers.*
+import common.ParticalHelper.checkedOption
 
 case class Description(val waypoints: Map[Point[Int], Int], val exits: Map[Point[Int], Int]):
   def merge(other: Description): Description =

@@ -2,6 +2,7 @@ package savinien.aoc18
 package day15
 
 import parsers.TokenParsers.*
+import common.ParticalHelper.checkedOption
 
 enum Tile:
   case Wall

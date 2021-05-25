@@ -6,6 +6,7 @@ import parsers.Nel.NonEmptyList
 import annotation.tailrec
 import savinien.aoc18.day19.JumpCPU
 import savinien.aoc18.day21.UnderflowCPU
+import common.ParticalHelper.checkedOption
 
 case class Instruction(operation: Operation, inputA: Int, inputB: Int, output: Int):
   def apply(register: Register): Register =

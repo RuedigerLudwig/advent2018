@@ -2,6 +2,7 @@ package savinien.aoc18
 package day18
 
 import parsers.TokenParsers.*
+import common.ParticalHelper.checkedOption
 
 enum Tile derives CanEqual:
   case Open

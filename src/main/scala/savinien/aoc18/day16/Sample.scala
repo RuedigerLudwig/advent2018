@@ -2,6 +2,7 @@ package savinien.aoc18
 package day16
 
 import parsers.TokenParsers.*
+import common.ParticalHelper.checkedOption
 
 case class Register private(values: List[Int]):
   def apply(pos: Int) = values(pos)
