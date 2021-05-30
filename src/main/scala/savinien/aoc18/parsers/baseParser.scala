@@ -114,6 +114,7 @@ trait BaseParsers[P[+_]] extends Monad[P]:
 
     def tupSep2(s: P[Any]): P[(A, A)]    = (p1 <* s) ~: p1
     def tupSep3(s: P[Any]): P[(A, A, A)] = (p1 <* s) ~: tupSep2(s)
+    def tupSep4(s: P[Any]): P[(A, A, A, A)] = (p1 <* s) ~: tupSep3(s)
 
     def inside(open: => P[Any], close: => P[Any]): P[A] =
       for
