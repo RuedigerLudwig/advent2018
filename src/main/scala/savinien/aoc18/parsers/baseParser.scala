@@ -20,6 +20,10 @@ trait BaseParsers[P[+_]] extends Monad[P]:
       case NonEmptyListLast(p)       => p
       case NonEmptyListLead(p, rest) => p | oneOf(rest)
 
+  def oneOf[A](p1: P[A], ps: P[A]*): P[A] = oneOf(NonEmptyList(p1, ps.toList))
+
+  def sepBy[A, B](pa: P[A], sep: P[Any], pb: P[B]): P[(A, B)] = (pa <* sep) ~: pb
+
   extension [A](p1: P[A])
     def report(msg: String): P[A] = p1.map { a => println(s"Msg: $msg; a: $a"); a }
 

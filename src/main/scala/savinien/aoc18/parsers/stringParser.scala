@@ -42,7 +42,7 @@ trait StringParsers extends TrampolineParsers[Char, String]:
   def endOfLine: Parser[Unit] = (string("\r\n") | (char('\n') | char('\r'))).unit
 
   def string(str: String): Parser[String] = 
-    filter(string(str.length))(_ == str)
+    msgFilter(string(str.length))(_ == str, s => s"'$s' did not match '$str'")
 
   def merge(p: => Parser[Char]): Parser[String] = many1(p).mkString
   def digits: Parser[String] = merge(digit)
